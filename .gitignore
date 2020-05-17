@@ -2,6 +2,6 @@
 mysql-connector-java-8.0.20
 database
 font
-*java
+*.java
 !Main.java
 !Login.java
