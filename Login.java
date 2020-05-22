@@ -385,25 +385,28 @@ public class Login extends JFrame implements ActionListener, KeyListener, FocusL
 			try {
 				db.conectar();
 				st = db.getConnection().createStatement();
-				ResultSet resultados = st.executeQuery("SELECT Username, Password, Email FROM User");
+				ResultSet resultados = st.executeQuery("SELECT nick_usu, contra_usu, emai_usu FROM Usuario");
 				boolean exist = false;
 				String userString = new String(this.userField.getText().trim());
 				String passwordString = new String(this.passwordField.getPassword());
 				while (resultados.next()) {
-					String userDB = resultados.getString("Username");
-					String passwordDB = resultados.getString("Password");
-					String emailDB = resultados.getString("Email");
+					String userDB = resultados.getString("nick_usu");
+					String passwordDB = resultados.getString("contra_usu");
+					String emailDB = resultados.getString("emai_usu");
 					exist = userString.equals(userDB) && passwordString.equals(passwordDB)
 							|| userString.equals(emailDB) && passwordString.equals(passwordDB);
 					if (exist) {
+						try {
+							st.executeUpdate("UPDATE Usuario SET sesion_act = 's' WHERE nick_usu = '" + userDB + "'");
+							System.out.println("Bienvenido");
+							//instanciar menu
+						} catch (SQLException e) {
+							JOptionPane.showMessageDialog(null, "Error: " + e, "Error", JOptionPane.ERROR_MESSAGE);
+						}
 						break;
+					} else {
+						System.out.println("Usuario o contraseña incorrectos.");
 					}
-				}
-				if (exist) {
-					//aqui se debera instanciar el menu
-					System.out.println("Bienvenido");
-				} else {
-					System.out.println("usuario o password incorrecto");
 				}
 				db.desconectar();
 			} catch (SQLException err) {
@@ -431,10 +434,10 @@ public class Login extends JFrame implements ActionListener, KeyListener, FocusL
 
 					String campos = "'" + userRegisterField.getText().trim() + "', '" + emailRegisterField.getText().trim() + "', '"
 							+ new String(passwordRegisterField.getPassword()) + "', '" + nameRegisterField.getText().trim()
-							+ "', '" + lastnameRegisterField.getText().trim() + "', false";
+							+ "', '" + lastnameRegisterField.getText().trim() + "', 'n', 'n'";
 
 					int resultado = st.executeUpdate(
-							"INSERT INTO User (Username, Email, Password, Name, LastName, isAdmin) VALUES (" + campos
+							"INSERT INTO Usuario (nick_usu, emai_usu, contra_usu, nom_usu, ape_usu, is_admin, sesion_act) VALUES (" + campos
 									+ ")");
 					if (resultado == 1) {
 						System.out.println("Usuario registrado con exito");
@@ -461,6 +464,27 @@ public class Login extends JFrame implements ActionListener, KeyListener, FocusL
 			} else {
 				System.out.println("las passwords deben coincidir");
 			}
+		}
+	}
+
+	public void closeSesion() {
+		try {
+			//Actualizamos el estado de sesion de usuario en la db
+			db.conectar();
+			st = db.getConnection().createStatement();
+			rs = st.executeQuery("SELECT nick_usu, sesion_act FROM Usuario");
+			String usuario = "";
+			while(rs.next()) {
+				if(rs.getString("sesion_act").equals("s")) {
+					usuario = rs.getString("nick_usu");
+					st.executeUpdate("UPDATE Usuario SET sesion_act = 'n' WHERE nom_usu = '" + usuario + "'");
+					System.out.println("Se ha desconectado el usuario: " + usuario);
+				  	break;
+				}
+			}
+			db.desconectar();
+		} catch (SQLException err) {
+			JOptionPane.showMessageDialog(null, "Error: " + err, "Error", JOptionPane.ERROR_MESSAGE);
 		}
 	}
 
@@ -777,7 +801,7 @@ public class Login extends JFrame implements ActionListener, KeyListener, FocusL
 	// ventana
 	@Override
 	public void windowClosing(WindowEvent evt) {
-
+		closeSesion();
 	}
 
 	@Override
