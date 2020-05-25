@@ -3,11 +3,9 @@ import java.awt.*;
 import java.awt.event.*;
 import java.sql.*;
 
-//Update
-
 public class Login extends JFrame implements ActionListener, KeyListener, FocusListener, MouseListener, WindowListener, MouseMotionListener {
 
-	private JLabel user, password, name, closeButton, minButton, titleLabel, registerLabel, registerButton,
+	private JLabel user, password, closeButton, minButton, titleLabel, registerLabel, registerButton,
 			welcomeLabel, signIn, nextButton, finishButton;
 	private JPanel bar, panel, panelRegister, finalPanel;
 	private JTextField userField;
@@ -27,11 +25,9 @@ public class Login extends JFrame implements ActionListener, KeyListener, FocusL
 	private Color textFieldColorEntered = new Color(74, 86, 129);
 	private Color buttonTextColor = new Color(232, 236, 249);
 	private String patchLogo = "images/Logo.png";
-	private CustomFont cf = new CustomFont();
 	private Conexion db;
 	private Statement st;
 	private ResultSet rs;
-	private Boolean exist = false;
 	private int x, y;
 	private String titlewindow;
 	private JLabel userRegister, passwordRegister, emailRegister, nameRegister, lastnameRegister, backButton,
@@ -398,15 +394,20 @@ public class Login extends JFrame implements ActionListener, KeyListener, FocusL
 					if (exist) {
 						try {
 							st.executeUpdate("UPDATE Usuario SET sesion_act = 's' WHERE nick_usu = '" + userDB + "'");
-							System.out.println("Bienvenido");
-							//instanciar menu
 						} catch (SQLException e) {
 							JOptionPane.showMessageDialog(null, "Error: " + e, "Error", JOptionPane.ERROR_MESSAGE);
 						}
 						break;
-					} else {
-						System.out.println("Usuario o contraseña incorrectos.");
 					}
+				}
+				if(exist) {
+					System.out.println("Bienvenido");
+					//instanciar menu
+					Menu menu = new Menu("Sistema");
+					menu.setVisible(true);
+					this.setVisible(false);
+				} else {
+					System.out.println("Usuario o password incorrectos.");
 				}
 				db.desconectar();
 			} catch (SQLException err) {
@@ -477,7 +478,7 @@ public class Login extends JFrame implements ActionListener, KeyListener, FocusL
 			while(rs.next()) {
 				if(rs.getString("sesion_act").equals("s")) {
 					usuario = rs.getString("nick_usu");
-					st.executeUpdate("UPDATE Usuario SET sesion_act = 'n' WHERE nom_usu = '" + usuario + "'");
+					st.executeUpdate("UPDATE Usuario SET sesion_act = 'n' WHERE nick_usu = '" + usuario + "'");
 					System.out.println("Se ha desconectado el usuario: " + usuario);
 				  	break;
 				}
@@ -496,12 +497,64 @@ public class Login extends JFrame implements ActionListener, KeyListener, FocusL
 
 	// Teclado
 	@Override
-	public void keyTyped(KeyEvent evt) { // No se ocupa aun
+	public void keyTyped(KeyEvent evt) {
+		if(evt.getSource().equals(this.userField)) {
+			if(this.userField.getText().length() > 25) {
+				evt.consume();
+			}
+		}
+		
+		if(evt.getSource().equals(this.passwordField)) {
+			if(this.passwordField.getPassword().length > 25) {
+				evt.consume();
+			}
+		}
 
+		if(evt.getSource().equals(this.userRegisterField)) {
+			if(this.passwordField.getPassword().length > 25) {
+				evt.consume();
+			}
+		}
+
+		if(evt.getSource().equals(this.userRegisterField)) {
+			if(this.userRegisterField.getText().length() > 25) {
+				evt.consume();
+			}
+		}
+
+		if(evt.getSource().equals(this.nameRegisterField)) {
+			if(this.nameRegisterField.getText().length() > 25) {
+				evt.consume();
+			}
+		}
+
+		if(evt.getSource().equals(this.lastnameRegisterField)) {
+			if(this.lastnameRegisterField.getText().length() > 25) {
+				evt.consume();
+			}
+		}
+
+		if(evt.getSource().equals(this.emailRegisterField)) {
+			if(this.emailRegisterField.getText().length() > 25) {
+				evt.consume();
+			}
+		}
+
+		if(evt.getSource().equals(this.passwordRegisterField)) {
+			if(this.passwordRegisterField.getPassword().length > 25) {
+				evt.consume();
+			}
+		}
+
+		if(evt.getSource().equals(this.passwordRegisterConfirmField)) {
+			if(this.passwordRegisterConfirmField.getPassword().length > 25) {
+				evt.consume();
+			}
+		}
 	}
 
 	@Override
-	public void keyReleased(KeyEvent evt) { // No se ocupa aun
+	public void keyReleased(KeyEvent evt) {
 		if (evt.getKeyCode() == 10) {
 			if (evt.getSource().equals(this.registerButton)) {
 				panel.setVisible(false);
@@ -550,11 +603,9 @@ public class Login extends JFrame implements ActionListener, KeyListener, FocusL
 			this.passwordField.setBorder(BorderFactory.createLineBorder(textFieldColorEntered, 2));
 		}
 		if (evt.getSource().equals(this.signIn)) {
-			//this.signIn.setBorder(BorderFactory.createLineBorder(textFieldColorEntered, 2));
 			this.signIn.setBackground(buttonColorEntered);
 		}
 		if (evt.getSource().equals(this.registerButton)) {
-			//this.finishButton.setBorder(BorderFactory.createLineBorder(textFieldColorEntered, 2));
 			this.registerButton.setForeground(buttonColorEntered);
 		}
 
@@ -569,7 +620,6 @@ public class Login extends JFrame implements ActionListener, KeyListener, FocusL
 			this.emailRegisterField.setBorder(BorderFactory.createLineBorder(textFieldColorEntered, 2));
 		}
 		if (evt.getSource().equals(this.nextButton)) {
-			//this.nextButton.setBorder(BorderFactory.createLineBorder(textFieldColorEntered, 2));
 			this.nextButton.setBackground(buttonColorEntered);
 		}
 		if (evt.getSource().equals(this.userRegisterField)) {
@@ -582,7 +632,6 @@ public class Login extends JFrame implements ActionListener, KeyListener, FocusL
 			this.passwordRegisterConfirmField.setBorder(BorderFactory.createLineBorder(textFieldColorEntered, 2));
 		}
 		if (evt.getSource().equals(this.finishButton)) {
-			//this.finishButton.setBorder(BorderFactory.createLineBorder(textFieldColorEntered, 2));
 			this.finishButton.setBackground(buttonColorEntered);
 		}
 	}
@@ -596,7 +645,6 @@ public class Login extends JFrame implements ActionListener, KeyListener, FocusL
 			this.passwordField.setBorder(BorderFactory.createLineBorder(barColor, 2));
 		}
 		if (evt.getSource().equals(this.signIn)) {
-			//this.signIn.setBorder(null);
 			this.signIn.setBackground(buttonColor);
 		}
 		if (evt.getSource().equals(this.registerButton)) {
@@ -614,7 +662,6 @@ public class Login extends JFrame implements ActionListener, KeyListener, FocusL
 			this.emailRegisterField.setBorder(BorderFactory.createLineBorder(barColor, 2));
 		}
 		if (evt.getSource().equals(this.nextButton)) {
-			//this.nextButton.setBorder(null);
 			this.nextButton.setBackground(buttonColor);
 		}
 		if (evt.getSource().equals(this.userRegisterField)) {
@@ -627,7 +674,6 @@ public class Login extends JFrame implements ActionListener, KeyListener, FocusL
 			this.passwordRegisterConfirmField.setBorder(BorderFactory.createLineBorder(barColor, 2));
 		}
 		if (evt.getSource().equals(this.finishButton)) {
-			//this.finishButton.setBorder(null);
 			this.finishButton.setBackground(buttonColor);
 		}
 	}
@@ -700,19 +746,14 @@ public class Login extends JFrame implements ActionListener, KeyListener, FocusL
 		if (evt.getSource().equals(this.seePassword2)) {
 			passwordField.setEchoChar((char) 0);
 		}
-		if (evt.getSource().equals(this.signIn)) {
-			//this.signIn.setBorder(BorderFactory.createLineBorder(textFieldColorEntered, 2));
-		}
 	}
 
 	@Override
 	public void mouseExited(MouseEvent evt) {
 		if (evt.getSource().equals(this.closeButton)) {
-			// this.closeButton.setIcon(new ImageIcon("images/close.png"));
 			this.closeButton.setBackground(barColor);
 		}
 		if (evt.getSource().equals(this.minButton)) {
-			// this.minButton.setIcon(new ImageIcon("images/min.png"));
 			this.minButton.setBackground(barColor);
 		}
 		if (evt.getSource().equals(this.registerButton)) {
@@ -744,11 +785,9 @@ public class Login extends JFrame implements ActionListener, KeyListener, FocusL
 	@Override
 	public void mouseEntered(MouseEvent evt) {
 		if (evt.getSource().equals(this.closeButton)) {
-			// this.closeButton.setIcon(new ImageIcon("images/close-enter.png"));
 			this.closeButton.setBackground(redColor);
 		}
 		if (evt.getSource().equals(this.minButton)) {
-			// this.minButton.setIcon(new ImageIcon("images/min-enter.png"));
 			this.minButton.setBackground(focusColor);
 		}
 		if (evt.getSource().equals(this.registerButton)) {
