@@ -3,10 +3,11 @@ import java.awt.*;
 import java.awt.event.*;
 import java.sql.*;
 
-public class Login extends JFrame implements ActionListener, KeyListener, FocusListener, MouseListener, WindowListener, MouseMotionListener {
+public class Login extends JFrame
+		implements ActionListener, KeyListener, FocusListener, MouseListener, WindowListener, MouseMotionListener {
 
-	private JLabel user, password, closeButton, minButton, titleLabel, registerLabel, registerButton,
-			welcomeLabel, signIn, nextButton, finishButton;
+	private JLabel user, password, closeButton, minButton, titleLabel, registerLabel, registerButton, welcomeLabel,
+			signIn, nextButton, finishButton;
 	private JPanel bar, panel, panelRegister, finalPanel;
 	private JTextField userField;
 	private JPasswordField passwordField;
@@ -374,8 +375,9 @@ public class Login extends JFrame implements ActionListener, KeyListener, FocusL
 	}
 
 	public void signInAction() {
-		boolean isEmptyData = this.userField.getText().trim().isEmpty() || new String(this.passwordField.getPassword()).isEmpty();
-		if(isEmptyData) {
+		boolean isEmptyData = this.userField.getText().trim().isEmpty()
+				|| new String(this.passwordField.getPassword()).isEmpty();
+		if (isEmptyData) {
 			System.out.println("Debe llenar todos los campos");
 		} else {
 			try {
@@ -400,9 +402,9 @@ public class Login extends JFrame implements ActionListener, KeyListener, FocusL
 						break;
 					}
 				}
-				if(exist) {
+				if (exist) {
 					System.out.println("Bienvenido");
-					//instanciar menu
+					// instanciar menu
 					Menu menu = new Menu("Sistema");
 					menu.setVisible(true);
 					this.setVisible(false);
@@ -428,18 +430,21 @@ public class Login extends JFrame implements ActionListener, KeyListener, FocusL
 		if (isEmptyData) {
 			System.out.println("Debe llenar todos los campos");
 		} else {
-			if (new String(passwordRegisterConfirmField.getPassword()).equals(new String(passwordRegisterField.getPassword()))) {
+			if (new String(passwordRegisterConfirmField.getPassword())
+					.equals(new String(passwordRegisterField.getPassword()))) {
 				try {
 					db.conectar();
 					st = db.getConnection().createStatement();
 
-					String campos = "'" + userRegisterField.getText().trim() + "', '" + emailRegisterField.getText().trim() + "', '"
-							+ new String(passwordRegisterField.getPassword()) + "', '" + nameRegisterField.getText().trim()
-							+ "', '" + lastnameRegisterField.getText().trim() + "', 'n', 'n'";
+					String campos = "'" + userRegisterField.getText().trim() + "', '"
+							+ emailRegisterField.getText().trim() + "', '"
+							+ new String(passwordRegisterField.getPassword()) + "', '"
+							+ nameRegisterField.getText().trim() + "', '" + lastnameRegisterField.getText().trim()
+							+ "', 'n', 'n'";
 
 					int resultado = st.executeUpdate(
-							"INSERT INTO Usuario (nick_usu, emai_usu, contra_usu, nom_usu, ape_usu, is_admin, sesion_act) VALUES (" + campos
-									+ ")");
+							"INSERT INTO Usuario (nick_usu, emai_usu, contra_usu, nom_usu, ape_usu, is_admin, sesion_act) VALUES ("
+									+ campos + ")");
 					if (resultado == 1) {
 						System.out.println("Usuario registrado con exito");
 						db.desconectar();
@@ -470,17 +475,17 @@ public class Login extends JFrame implements ActionListener, KeyListener, FocusL
 
 	public void closeSesion() {
 		try {
-			//Actualizamos el estado de sesion de usuario en la db
+			// Actualizamos el estado de sesion de usuario en la db
 			db.conectar();
 			st = db.getConnection().createStatement();
 			rs = st.executeQuery("SELECT nick_usu, sesion_act FROM Usuario");
 			String usuario = "";
-			while(rs.next()) {
-				if(rs.getString("sesion_act").equals("s")) {
+			while (rs.next()) {
+				if (rs.getString("sesion_act").equals("s")) {
 					usuario = rs.getString("nick_usu");
 					st.executeUpdate("UPDATE Usuario SET sesion_act = 'n' WHERE nick_usu = '" + usuario + "'");
 					System.out.println("Se ha desconectado el usuario: " + usuario);
-				  	break;
+					break;
 				}
 			}
 			db.desconectar();
@@ -492,62 +497,62 @@ public class Login extends JFrame implements ActionListener, KeyListener, FocusL
 	// Botones
 	@Override
 	public void actionPerformed(ActionEvent evt) {
-	
+
 	}
 
 	// Teclado
 	@Override
 	public void keyTyped(KeyEvent evt) {
-		if(evt.getSource().equals(this.userField)) {
-			if(this.userField.getText().length() > 25) {
-				evt.consume();
-			}
-		}
-		
-		if(evt.getSource().equals(this.passwordField)) {
-			if(this.passwordField.getPassword().length > 25) {
+		if (evt.getSource().equals(this.userField)) {
+			if (this.userField.getText().length() > 25) {
 				evt.consume();
 			}
 		}
 
-		if(evt.getSource().equals(this.userRegisterField)) {
-			if(this.passwordField.getPassword().length > 25) {
+		if (evt.getSource().equals(this.passwordField)) {
+			if (this.passwordField.getPassword().length > 25) {
 				evt.consume();
 			}
 		}
 
-		if(evt.getSource().equals(this.userRegisterField)) {
-			if(this.userRegisterField.getText().length() > 25) {
+		if (evt.getSource().equals(this.userRegisterField)) {
+			if (this.passwordField.getPassword().length > 25) {
 				evt.consume();
 			}
 		}
 
-		if(evt.getSource().equals(this.nameRegisterField)) {
-			if(this.nameRegisterField.getText().length() > 25) {
+		if (evt.getSource().equals(this.userRegisterField)) {
+			if (this.userRegisterField.getText().length() > 25) {
 				evt.consume();
 			}
 		}
 
-		if(evt.getSource().equals(this.lastnameRegisterField)) {
-			if(this.lastnameRegisterField.getText().length() > 25) {
+		if (evt.getSource().equals(this.nameRegisterField)) {
+			if (this.nameRegisterField.getText().length() > 25) {
 				evt.consume();
 			}
 		}
 
-		if(evt.getSource().equals(this.emailRegisterField)) {
-			if(this.emailRegisterField.getText().length() > 25) {
+		if (evt.getSource().equals(this.lastnameRegisterField)) {
+			if (this.lastnameRegisterField.getText().length() > 25) {
 				evt.consume();
 			}
 		}
 
-		if(evt.getSource().equals(this.passwordRegisterField)) {
-			if(this.passwordRegisterField.getPassword().length > 25) {
+		if (evt.getSource().equals(this.emailRegisterField)) {
+			if (this.emailRegisterField.getText().length() > 25) {
 				evt.consume();
 			}
 		}
 
-		if(evt.getSource().equals(this.passwordRegisterConfirmField)) {
-			if(this.passwordRegisterConfirmField.getPassword().length > 25) {
+		if (evt.getSource().equals(this.passwordRegisterField)) {
+			if (this.passwordRegisterField.getPassword().length > 25) {
+				evt.consume();
+			}
+		}
+
+		if (evt.getSource().equals(this.passwordRegisterConfirmField)) {
+			if (this.passwordRegisterConfirmField.getPassword().length > 25) {
 				evt.consume();
 			}
 		}
@@ -589,13 +594,13 @@ public class Login extends JFrame implements ActionListener, KeyListener, FocusL
 
 	@Override
 	public void keyPressed(KeyEvent evt) {
-		
+
 	}
 
 	// Focus
 	@Override
 	public void focusGained(FocusEvent evt) {
-		//fields login
+		// fields login
 		if (evt.getSource().equals(this.userField)) {
 			this.userField.setBorder(BorderFactory.createLineBorder(textFieldColorEntered, 2));
 		}
@@ -609,7 +614,7 @@ public class Login extends JFrame implements ActionListener, KeyListener, FocusL
 			this.registerButton.setForeground(buttonColorEntered);
 		}
 
-		//fields register
+		// fields register
 		if (evt.getSource().equals(this.nameRegisterField)) {
 			this.nameRegisterField.setBorder(BorderFactory.createLineBorder(textFieldColorEntered, 2));
 		}
@@ -651,7 +656,7 @@ public class Login extends JFrame implements ActionListener, KeyListener, FocusL
 			this.registerButton.setForeground(buttonColor);
 		}
 
-		//fields register
+		// fields register
 		if (evt.getSource().equals(this.nameRegisterField)) {
 			this.nameRegisterField.setBorder(BorderFactory.createLineBorder(barColor, 2));
 		}

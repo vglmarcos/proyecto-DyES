@@ -1,8 +1,4 @@
 *.class
-*.java
 mysql-connector-java-8.0.20
 drivers
 font
-!Main.java
-!Login.java
-!Menu.java
