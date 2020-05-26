@@ -7,13 +7,17 @@ import java.sql.*;
 
 public class Menu extends JFrame implements ActionListener, KeyListener, FocusListener, MouseListener, WindowListener, MouseMotionListener {
 
-	private JLabel closeButton, minButton, titleLabel;
+	private JLabel closeButton, minButton, titleLabel, exitButton, cotizacionButton, cotizacionText;
 	private JPanel bar;
 	private Color panel2 = new Color(54, 57, 63);
+	private Color panel1 = new Color(42, 44, 49);
 	private Color fontColor2 = new Color(134, 138, 143);
     private Color barColor = new Color(34, 36, 40);
     private Color redColor = new Color(179, 29, 29);
 	private Color focusColor = new Color(53, 55, 58);
+	private Color buttonTextColor = new Color(232, 236, 249);
+	private Color buttonColor = new Color(101, 59, 152);
+	private Color buttonColorEntered = new Color(80, 48, 119);
 	private String patchLogo = "images/Logo.png";
 	private Conexion db;
 	private Statement st;
@@ -33,12 +37,12 @@ public class Menu extends JFrame implements ActionListener, KeyListener, FocusLi
 		}
 
 		this.setLayout(null);
-		this.setBounds(0, 0, 800, 600);
+		this.setBounds(0, 0, 900, 700);
 		this.setLocationRelativeTo(null);
 		this.setResizable(false);
 		this.setTitle(title);
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		this.getContentPane().setBackground(panel2);
+		this.getContentPane().setBackground(panel1);
 		this.setIconImage(new ImageIcon(getClass().getResource(patchLogo)).getImage());
 		this.addWindowListener(this);
 		this.setUndecorated(true);
@@ -46,7 +50,7 @@ public class Menu extends JFrame implements ActionListener, KeyListener, FocusLi
 
 		bar = new JPanel();
 		bar.setBackground(barColor);
-		bar.setBounds(0, 0, 800, 30);
+		bar.setBounds(0, 0, 900, 30);
 		bar.setLayout(null);
 		bar.setVisible(true);
 		bar.addMouseMotionListener(this);
@@ -59,18 +63,42 @@ public class Menu extends JFrame implements ActionListener, KeyListener, FocusLi
 		bar.add(titleLabel);
 
 		closeButton = new JLabel(new ImageIcon("images/close.png"), SwingConstants.CENTER);
-		closeButton.setBounds(770, 0, 30, 30);
+		closeButton.setBounds(870, 0, 30, 30);
 		closeButton.setOpaque(true);
 		closeButton.setBackground(barColor);
 		closeButton.addMouseListener(this);
 		bar.add(closeButton);
 
 		minButton = new JLabel(new ImageIcon("images/min.png"), SwingConstants.CENTER);
-		minButton.setBounds(740, 0, 30, 30);
+		minButton.setBounds(840, 0, 30, 30);
 		minButton.setOpaque(true);
 		minButton.setBackground(barColor);
 		minButton.addMouseListener(this);
 		bar.add(minButton);
+
+		cotizacionButton = new JLabel(new ImageIcon("images/cotizacion.png"), SwingConstants.CENTER);
+		cotizacionButton.setBounds(40, 500, 150, 150);
+		cotizacionButton.setBackground(panel1);
+		cotizacionButton.setOpaque(true);
+		cotizacionButton.addKeyListener(this);
+		cotizacionButton.addFocusListener(this);
+		cotizacionButton.addMouseListener(this);
+		this.add(cotizacionButton);
+
+		cotizacionText = new JLabel("Cotizaciones", SwingConstants.CENTER);
+		cotizacionText.setBounds(40, 650, 150, 20);
+		cotizacionText.setFont(new Font("Microsoft New Tai Lue", 1, 16));
+		cotizacionText.setForeground(fontColor2);
+		this.add(cotizacionText);
+
+		exitButton = new JLabel(new ImageIcon("images/close-sesion.png"), SwingConstants.CENTER);
+		exitButton.setBounds(820, 60, 60, 60);
+		exitButton.setBackground(panel1);
+		exitButton.setOpaque(true);
+		exitButton.addKeyListener(this);
+		exitButton.addFocusListener(this);
+		exitButton.addMouseListener(this);
+		this.add(exitButton);
 	}
 
 	public void closeSesion() {
@@ -92,6 +120,13 @@ public class Menu extends JFrame implements ActionListener, KeyListener, FocusLi
 		} catch (SQLException err) {
 			JOptionPane.showMessageDialog(null, "Error: " + err, "Error", JOptionPane.ERROR_MESSAGE);
 		}
+	}
+
+	public void exitSystem() {
+		closeSesion();
+		Login login = new Login("Ingresar");
+		login.setVisible(true);
+		this.setVisible(false);
 	}
 
 	// Botones
@@ -138,6 +173,9 @@ public class Menu extends JFrame implements ActionListener, KeyListener, FocusLi
 		if (evt.getSource().equals(this.minButton)) {
 			this.setExtendedState(ICONIFIED);
 		}
+		if (evt.getSource().equals(this.exitButton)) {
+			exitSystem();
+		}
 	}
 
 	@Override
@@ -153,6 +191,12 @@ public class Menu extends JFrame implements ActionListener, KeyListener, FocusLi
 		if (evt.getSource().equals(this.minButton)) {
 			this.minButton.setBackground(barColor);
 		}
+		if (evt.getSource().equals(this.cotizacionButton)) {
+			this.cotizacionButton.setBackground(panel1);
+		}
+		if (evt.getSource().equals(this.exitButton)) {
+			this.exitButton.setBackground(panel1);
+		}
 	}
 
 	@Override
@@ -162,6 +206,12 @@ public class Menu extends JFrame implements ActionListener, KeyListener, FocusLi
 		}
 		if (evt.getSource().equals(this.minButton)) {
 			this.minButton.setBackground(focusColor);
+		}
+		if (evt.getSource().equals(this.cotizacionButton)) {
+			this.cotizacionButton.setBackground(focusColor);
+		}
+		if (evt.getSource().equals(this.exitButton)) {
+			this.exitButton.setBackground(focusColor);
 		}
 	}
 
