@@ -378,6 +378,7 @@ public class Login extends JFrame
 		boolean isEmptyData = this.userField.getText().trim().isEmpty()
 				|| new String(this.passwordField.getPassword()).isEmpty();
 		if (isEmptyData) {
+			JOptionPane.showMessageDialog(null, "Debe llenar todos los campos ", "Advertencia", JOptionPane.WARNING_MESSAGE);
 			System.out.println("Debe llenar todos los campos");
 		} else {
 			try {
@@ -403,12 +404,14 @@ public class Login extends JFrame
 					}
 				}
 				if (exist) {
+					JOptionPane.showMessageDialog(null, "Bienvenido", "Login", JOptionPane.INFORMATION_MESSAGE);
 					System.out.println("Bienvenido");
 					// instanciar menu
 					Menu menu = new Menu("Sistema");
 					menu.setVisible(true);
 					this.setVisible(false);
 				} else {
+					JOptionPane.showMessageDialog(null, "Usuario o password incorrectos", "Error", JOptionPane.ERROR_MESSAGE);
 					System.out.println("Usuario o password incorrectos.");
 				}
 				db.desconectar();
@@ -428,6 +431,7 @@ public class Login extends JFrame
 				|| lastnameRegisterField.getText().trim().isEmpty();
 
 		if (isEmptyData) {
+			JOptionPane.showMessageDialog(null, "Debe llenar todos los campos", "Advertencia", JOptionPane.WARNING_MESSAGE);
 			System.out.println("Debe llenar todos los campos");
 		} else {
 			if (new String(passwordRegisterConfirmField.getPassword())
@@ -446,6 +450,7 @@ public class Login extends JFrame
 							"INSERT INTO Usuario (nick_usu, emai_usu, contra_usu, nom_usu, ape_usu, is_admin, sesion_act) VALUES ("
 									+ campos + ")");
 					if (resultado == 1) {
+						JOptionPane.showMessageDialog(null, "Usuario registrado con \u00E9xito", "Registro", JOptionPane.INFORMATION_MESSAGE);
 						System.out.println("Usuario registrado con exito");
 						db.desconectar();
 						panel.setVisible(true);
@@ -462,12 +467,14 @@ public class Login extends JFrame
 						nameRegisterField.setText("");
 						userField.requestFocus();
 					} else {
+						JOptionPane.showMessageDialog(null, "Error al registrar al usuarioi", "Error", JOptionPane.ERROR_MESSAGE);
 						System.out.println("Error al registrar usuario");
 					}
 				} catch (SQLException err) {
 					JOptionPane.showMessageDialog(null, "Error" + err, "Error", JOptionPane.ERROR_MESSAGE);
 				}
 			} else {
+				JOptionPane.showMessageDialog(null, "Las passwords deben coincidir", "Error", JOptionPane.ERROR_MESSAGE);
 				System.out.println("las passwords deben coincidir");
 			}
 		}

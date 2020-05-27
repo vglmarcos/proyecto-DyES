@@ -5,42 +5,57 @@ import java.sql.*;
 
 //Update
 
-public class Menu extends JFrame implements ActionListener, KeyListener, FocusListener, MouseListener, WindowListener {
+public class Menu extends JFrame implements ActionListener, KeyListener, FocusListener, MouseListener, WindowListener, MouseMotionListener {
 
-	private Color blue = new Color(0, 153, 153);
-	private Color blue2 = new Color(2, 199, 199);
-	private Color blue3 = new Color(0, 220, 220);
-	private Color blue4 = new Color(0, 243, 243);
-	private Color bluefocus = new Color(167, 255, 255);
-	private Color white = new Color(255, 255, 255);
-	private Color black = new Color(0, 0, 0);
-	private Color gray = new Color(224, 224, 224);
-	private JButton product, sale, provider, employee;
-	private String patchLogo = "images/Logo.png";
-	private String patchProduct = "images/product.png";
-	private String patchSale = "images/sale.png";
-	private String patchProvider = "images/provider.png";
-	private String patchEmployee = "images/employee.png";
-	private JLabel tira, tira2, tira3, tira4, rights;
-	private JLabel productLabel, saleLabel, providerLabel, employeeLabel;
-	private ImageIcon productImg = new ImageIcon(patchProduct);
-	private ImageIcon saleImg = new ImageIcon(patchSale);
-	private ImageIcon providerImg = new ImageIcon(patchProvider);
-	private ImageIcon employeeImg = new ImageIcon(patchEmployee);
+	private JLabel closeButton, minButton, titleLabel;
+	private Color panel1 = new Color(42, 44, 49);
+	private Color panel2 = new Color(54, 57, 63);
+	private Color fontColor1 = new Color(194, 196, 197);
+	private Color fontColor2 = new Color(134, 138, 143);
+	private Color fieldColor = new Color(48, 51, 57);
+	private Color barColor = new Color(34, 36, 40);
+	private Color redColor = new Color(179, 29, 29);
+	private Color redColorEntered = new Color(148, 27, 27);
+	private Color focusColor = new Color(53, 55, 58);
+	private Color buttonColor = new Color(101, 59, 152);
+	private Color buttonColorEntered = new Color(80, 48, 119);
+	private Color selectedText = new Color(255, 255, 255);
+	private Color selectionColor = new Color(10, 103, 215);
+	private Color textFieldColorEntered = new Color(74, 86, 129);
+	private Color buttonTextColor = new Color(232, 236, 249);
+	private String titlewindow;
 	private Conexion db;
 	private Statement st;
 	private ResultSet rs;
+	private int x, y;
+	private String patchLogo = "images/Logo.png";
+	private JPanel bar, panel, panelsystem, panelAbout;
+	private String patchProduct = "images/product.png";
+	private String patchSale = "images/sale.png";
+	private String patchEmployee = "images/employee.png";
+	private String patchAbout = "images/about.png";
+	private String patchlogomenu = "images/San-Roman-logo.png";
+	private JLabel productLabel, saleLabel, employeeLabel, aboutLabel;
+	private ImageIcon productImg = new ImageIcon(patchProduct);
+	private ImageIcon saleImg = new ImageIcon(patchSale);
+	private ImageIcon employeeImg = new ImageIcon(patchEmployee);
+	private ImageIcon aboutImg = new ImageIcon(patchAbout);
+	private ImageIcon logomenuImg = new ImageIcon(patchlogomenu);
+	private JLabel logo, product, sale, employee, about, logout, appname;
+	private JLabel systemName, javaVersion, systemVersion, enterpriseName, enterpriseDir, enterpriseTel, exit;
 
 	public Menu(String title) {
 		this.setLayout(null);
-		this.setBounds(0, 0, 810, 650);
+		this.setBounds(0, 0, 1500, 800);
 		this.setLocationRelativeTo(null);
 		this.setResizable(false);
 		this.setTitle(title);
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		this.getContentPane().setBackground(white);
+		this.getContentPane().setBackground(panel2);
 		this.setIconImage(new ImageIcon(getClass().getResource(patchLogo)).getImage());
 		this.addWindowListener(this);
+		this.setUndecorated(true);
+		this.titlewindow = title;
 
 		// iniciamos conexion a la db
 		db = new Conexion();
@@ -51,114 +66,232 @@ public class Menu extends JFrame implements ActionListener, KeyListener, FocusLi
 			JOptionPane.showMessageDialog(null, "Error: " + err, "Error", JOptionPane.ERROR_MESSAGE);
 		}
 
-		product = new JButton();
-		product.setBounds(125, 103, 170, 170);
-		product.setBackground(white);
+		bar = new JPanel();
+		bar.setBackground(barColor);
+		bar.setBounds(0, 0, 1500, 30);
+		bar.setLayout(null);
+		bar.setVisible(true);
+		bar.addMouseMotionListener(this);
+		this.add(bar);
+
+		panel = new JPanel();
+		panel.setBackground(panel1);
+		panel.setBounds(20, 50, 1460, 730);
+		panel.setLayout(null);
+		panel.setBorder(BorderFactory.createLineBorder(barColor, 2));
+		panel.setVisible(true);
+		this.add(panel);
+
+		panelsystem = new JPanel();
+		panelsystem.setBackground(fieldColor);
+		panelsystem.setBounds(50, 77, 1360, 299);
+		panelsystem.setLayout(null);
+		panelsystem.setBorder(BorderFactory.createLineBorder(barColor, 2));
+		panelsystem.setVisible(true);
+		panel.add(panelsystem);
+
+		panelAbout = new JPanel();
+		panelAbout.setBackground(panel1);
+		panelAbout.setBounds(20, 50, 1460, 730);
+		panelAbout.setLayout(null);
+		panelAbout.setBorder(BorderFactory.createLineBorder(barColor, 2));
+		panelAbout.setVisible(false);
+		this.add(panelAbout);
+
+		titleLabel = new JLabel(titlewindow);
+		titleLabel.setBounds(20, 2, 100, 30);
+		titleLabel.setFont(new Font("Microsoft New Tai Lue", 1, 16));
+		titleLabel.setForeground(fontColor2);
+		bar.add(titleLabel);
+
+		closeButton = new JLabel(new ImageIcon("images/close.png"), SwingConstants.CENTER);
+		closeButton.setBounds(1470, 0, 30, 30);
+		closeButton.setOpaque(true);
+		closeButton.setBackground(barColor);
+		closeButton.addMouseListener(this);
+		bar.add(closeButton);
+
+		minButton = new JLabel(new ImageIcon("images/min.png"), SwingConstants.CENTER);
+		minButton.setBounds(1440, 0, 30, 30);
+		minButton.setOpaque(true);
+		minButton.setBackground(barColor);
+		minButton.addMouseListener(this);
+		bar.add(minButton);
+
+		appname = new JLabel("Kardient", SwingConstants.CENTER);
+		appname.setBounds(0, 40, 1360, 219);
+		appname.setFont(new Font("Microsoft New Tai Lue", 1, 70));
+		appname.setForeground(fontColor1);
+		panelsystem.add(appname);
+
+		logout = new JLabel("Cerrar Sesi\u00f3n",SwingConstants.CENTER);
+		logout.setBounds(1190, 20, 250, 40);
+		logout.setFont(new Font("Microsoft New Tai Lue", 1, 22));
+		logout.setForeground(buttonTextColor);
+		logout.setBorder(BorderFactory.createLineBorder(barColor, 2));
+		logout.setOpaque(true);
+		logout.setBackground(redColor);
+		logout.addMouseListener(this);
+		panel.add(logout);
+
+		product = new JLabel("", SwingConstants.CENTER);
+		product.setBounds(50, 430, 250, 250);
+		product.setBackground(buttonColor);
 		product.setIcon(productImg);
 		product.setHorizontalTextPosition(SwingConstants.CENTER);
-		product.setVerticalTextPosition(SwingConstants.BOTTOM);
-		product.setBorder(null);
-		product.addActionListener(this);
+		product.setVerticalTextPosition(SwingConstants.CENTER);
+		product.setBorder(BorderFactory.createLineBorder(barColor, 2));
+		product.setOpaque(true);
 		product.addKeyListener(this);
 		product.addFocusListener(this);
 		product.addMouseListener(this);
-		add(product);
+		panel.add(product);
 
 		productLabel = new JLabel("Productos", SwingConstants.CENTER);
-		productLabel.setBounds(125, 273, 170, 30);
-		productLabel.setFont(new Font("Microsoft New Tai Lue", 1, 18));
-		productLabel.setForeground(blue);
-		add(productLabel);
+		productLabel.setBounds(50, 430, 250, 250);
+		productLabel.setFont(new Font("Microsoft New Tai Lue", 1, 40));
+		productLabel.setForeground(buttonTextColor);
+		productLabel.setBackground(buttonColorEntered);
+		productLabel.setBorder(BorderFactory.createLineBorder(barColor, 2));
+		productLabel.setVisible(false);
+		productLabel.setOpaque(true);
+		productLabel.addKeyListener(this);
+		productLabel.addFocusListener(this);
+		productLabel.addMouseListener(this);
+		panel.add(productLabel);
 
-		sale = new JButton();
-		sale.setBounds(505, 103, 170, 170);
-		sale.setBackground(white);
+		sale = new JLabel("", SwingConstants.CENTER);
+		sale.setBounds(420, 430, 250, 250);
+		sale.setBackground(buttonColor);
 		sale.setIcon(saleImg);
 		sale.setHorizontalTextPosition(SwingConstants.CENTER);
-		sale.setVerticalTextPosition(SwingConstants.BOTTOM);
-		sale.setBorder(null);
-		sale.addActionListener(this);
+		sale.setVerticalTextPosition(SwingConstants.CENTER);
+		sale.setBorder(BorderFactory.createLineBorder(barColor, 2));
+		sale.setOpaque(true);
 		sale.addKeyListener(this);
 		sale.addFocusListener(this);
 		sale.addMouseListener(this);
-		add(sale);
+		panel.add(sale);
 
 		saleLabel = new JLabel("Cotizaci\u00F3n", SwingConstants.CENTER);
-		saleLabel.setBounds(505, 273, 170, 30);
-		saleLabel.setFont(new Font("Microsoft New Tai Lue", 1, 18));
-		saleLabel.setForeground(blue);
-		add(saleLabel);
+		saleLabel.setBounds(420, 430, 250, 250);
+		saleLabel.setFont(new Font("Microsoft New Tai Lue", 1, 40));
+		saleLabel.setForeground(buttonTextColor);
+		saleLabel.setBackground(buttonColorEntered);
+		saleLabel.setBorder(BorderFactory.createLineBorder(barColor, 2));
+		saleLabel.setVisible(false);
+		saleLabel.setOpaque(true);
+		saleLabel.addKeyListener(this);
+		saleLabel.addFocusListener(this);
+		saleLabel.addMouseListener(this);
+		panel.add(saleLabel);
 
-		provider = new JButton();
-		provider.setBounds(125, 336, 170, 170);
-		provider.setBackground(white);
-		provider.setIcon(providerImg);
-		provider.setHorizontalTextPosition(SwingConstants.CENTER);
-		provider.setVerticalTextPosition(SwingConstants.BOTTOM);
-		provider.setBorder(null);
-		provider.addActionListener(this);
-		provider.addKeyListener(this);
-		provider.addFocusListener(this);
-		provider.addMouseListener(this);
-		add(provider);
-
-		providerLabel = new JLabel("Proveedor", SwingConstants.CENTER);
-		providerLabel.setBounds(125, 506, 170, 30);
-		providerLabel.setFont(new Font("Microsoft New Tai Lue", 1, 18));
-		providerLabel.setForeground(blue);
-		add(providerLabel);
-
-		employee = new JButton();
-		employee.setBounds(505, 336, 170, 170);
-		employee.setBackground(white);
+		employee = new JLabel("", SwingConstants.CENTER);
+		employee.setBounds(790, 430, 250, 250);
+		employee.setBackground(buttonColor);
 		employee.setIcon(employeeImg);
 		employee.setHorizontalTextPosition(SwingConstants.CENTER);
-		employee.setVerticalTextPosition(SwingConstants.BOTTOM);
-		employee.setBorder(null);
-		employee.addActionListener(this);
+		employee.setVerticalTextPosition(SwingConstants.CENTER);
+		employee.setBorder(BorderFactory.createLineBorder(barColor, 2));
+		employee.setOpaque(true);
 		employee.addKeyListener(this);
 		employee.addFocusListener(this);
 		employee.addMouseListener(this);
-		add(employee);
+		panel.add(employee);
 
 		employeeLabel = new JLabel("Empleados", SwingConstants.CENTER);
-		employeeLabel.setBounds(505, 506, 170, 30);
-		employeeLabel.setFont(new Font("Microsoft New Tai Lue", 1, 18));
-		employeeLabel.setForeground(blue);
-		add(employeeLabel);
+		employeeLabel.setBounds(790, 430, 250, 250);
+		employeeLabel.setFont(new Font("Microsoft New Tai Lue", 1, 40));
+		employeeLabel.setForeground(buttonTextColor);
+		employeeLabel.setBackground(buttonColorEntered);
+		employeeLabel.setBorder(BorderFactory.createLineBorder(barColor, 2));
+		employeeLabel.setVisible(false);
+		employeeLabel.setOpaque(true);
+		employeeLabel.addKeyListener(this);
+		employeeLabel.addFocusListener(this);
+		employeeLabel.addMouseListener(this);
+		panel.add(employeeLabel);
 
-		rights = new JLabel("Cristaler\u00eda San Rom\u00e1n. \u00A9 Copyright 2019. Todos los derechos reservados.",
-				SwingConstants.CENTER);
-		rights.setBounds(0, 591, 810, 30);
-		rights.setFont(new Font("Microsoft New Tai Lue", 2, 12));
-		rights.setOpaque(true);
-		rights.setBackground(black);
-		rights.setForeground(white);
-		add(rights);
+		about = new JLabel("", SwingConstants.CENTER);
+		about.setBounds(1160, 430, 250, 250);
+		about.setBackground(buttonColor);
+		about.setIcon(aboutImg);
+		about.setHorizontalTextPosition(SwingConstants.CENTER);
+		about.setVerticalTextPosition(SwingConstants.CENTER);
+		about.setBorder(BorderFactory.createLineBorder(barColor, 2));
+		about.setOpaque(true);
+		about.addKeyListener(this);
+		about.addFocusListener(this);
+		about.addMouseListener(this);
+		panel.add(about);
 
-		tira = new JLabel();
-		tira.setBounds(0, 0, 810, 20);
-		tira.setBackground(blue);
-		tira.setOpaque(true);
-		add(tira);
+		aboutLabel = new JLabel("Acerda de", SwingConstants.CENTER);
+		aboutLabel.setBounds(1160, 430, 250, 250);
+		aboutLabel.setFont(new Font("Microsoft New Tai Lue", 1, 40));
+		aboutLabel.setForeground(buttonTextColor);
+		aboutLabel.setBackground(buttonColorEntered);
+		aboutLabel.setBorder(BorderFactory.createLineBorder(barColor, 2));
+		aboutLabel.setVisible(false);
+		aboutLabel.setOpaque(true);
+		aboutLabel.addKeyListener(this);
+		aboutLabel.addFocusListener(this);
+		aboutLabel.addMouseListener(this);
+		panel.add(aboutLabel);
 
-		tira2 = new JLabel();
-		tira2.setBounds(0, 20, 810, 9);
-		tira2.setBackground(blue2);
-		tira2.setOpaque(true);
-		add(tira2);
+		exit = new JLabel("Regresar", SwingConstants.CENTER);
+		exit.setBounds(1190, 20, 250, 40);
+		exit.setFont(new Font("Microsoft New Tai Lue", 1, 24));
+		exit.setBackground(redColor);
+		exit.setForeground(buttonTextColor);
+		exit.setBorder(BorderFactory.createLineBorder(barColor, 2));
+		exit.setOpaque(true);
+		exit.addKeyListener(this);
+		exit.addFocusListener(this);
+		exit.addMouseListener(this);
+		panelAbout.add(exit);
 
-		tira3 = new JLabel();
-		tira3.setBounds(0, 29, 810, 7);
-		tira3.setBackground(blue3);
-		tira3.setOpaque(true);
-		add(tira3);
+		systemName = new JLabel("Kardient", SwingConstants.CENTER);
+		systemName.setBounds(0, 80, 1460, 70);
+		systemName.setFont(new Font("Microsoft New Tai Lue", 1, 60));
+		systemName.setForeground(fontColor1);
+		panelAbout.add(systemName);
 
-		tira4 = new JLabel();
-		tira4.setBounds(0, 36, 810, 4);
-		tira4.setBackground(blue4);
-		tira4.setOpaque(true);
-		add(tira4);
+		systemVersion = new JLabel("Versi\u00f3n 1.0", SwingConstants.CENTER);
+		systemVersion.setBounds(0, 190, 1460, 40);
+		systemVersion.setFont(new Font("Microsoft New Tai Lue", 1, 30));
+		systemVersion.setForeground(fontColor1);
+		panelAbout.add(systemVersion);
+
+		javaVersion = new JLabel("Sistema creado en la versi\u00f3n 1.8.0_251 de JAVA", SwingConstants.CENTER);
+		javaVersion.setBounds(0, 270, 1460, 40);
+		javaVersion.setFont(new Font("Microsoft New Tai Lue", 1, 30));
+		javaVersion.setForeground(fontColor1);
+		panelAbout.add(javaVersion);
+
+		logo = new JLabel("", SwingConstants.CENTER);
+		logo.setBounds(0, 340, 1460, 133);
+		logo.setIcon(logomenuImg);
+		logo.setHorizontalTextPosition(SwingConstants.CENTER);
+		logo.setVerticalTextPosition(SwingConstants.CENTER);
+		panelAbout.add(logo);
+
+		enterpriseName = new JLabel("Cristaler\u00eda San Rom\u00e1n", SwingConstants.CENTER);
+		enterpriseName.setBounds(0, 500, 1460, 40);
+		enterpriseName.setFont(new Font("Microsoft New Tai Lue", 1, 30));
+		enterpriseName.setForeground(fontColor1);
+		panelAbout.add(enterpriseName);
+
+		enterpriseDir = new JLabel("San Feipe No. 2599 Col.San Jorge Monterrey, N.L.", SwingConstants.CENTER);
+		enterpriseDir.setBounds(0, 570, 1460, 40);
+		enterpriseDir.setFont(new Font("Microsoft New Tai Lue", 1, 30));
+		enterpriseDir.setForeground(fontColor1);
+		panelAbout.add(enterpriseDir);
+
+		enterpriseTel = new JLabel("Tels: 818 708-4664, 83-11-2331", SwingConstants.CENTER);
+		enterpriseTel.setBounds(0, 640, 1460, 40);
+		enterpriseTel.setFont(new Font("Microsoft New Tai Lue", 1, 30));
+		enterpriseTel.setForeground(fontColor1);
+		panelAbout.add(enterpriseTel);
 	}
 
 	public void closeSesion() {
@@ -185,23 +318,6 @@ public class Menu extends JFrame implements ActionListener, KeyListener, FocusLi
 	// Botones
 	@Override
 	public void actionPerformed(ActionEvent evt) {
-		if (evt.getSource() == sale) {
-			Cotizacion c1 = new Cotizacion("Cotizaci\u00F3n");
-			c1.setVisible(true);
-			this.setVisible(false);
-		} else if (evt.getSource() == product) {
-			Producto p1 = new Producto("Producto");
-			p1.setVisible(true);
-			this.setVisible(false);
-		} else if (evt.getSource() == provider) {
-			Proveedor prov = new Proveedor("Proveedor");
-			prov.setVisible(true);
-			this.setVisible(false);
-		} else if (evt.getSource() == employee) {
-			Empleado e1 = new Empleado("Empleado");
-			e1.setVisible(true);
-			this.setVisible(false);
-		}
 	}
 
 	// Teclado
@@ -217,58 +333,124 @@ public class Menu extends JFrame implements ActionListener, KeyListener, FocusLi
 
 	@Override
 	public void keyPressed(KeyEvent evt) {
-		if (evt.getKeyCode() == 10) {
-			if (evt.getSource() == sale) {
-				Cotizacion c1 = new Cotizacion("Cotizaci\u00F3n");
-				c1.setVisible(true);
-				this.setVisible(false);
-			} else if (evt.getSource() == product) {
-				Producto p1 = new Producto("Producto");
-				p1.setVisible(true);
-				this.setVisible(false);
-			} else if (evt.getSource() == provider) {
-				Proveedor prov = new Proveedor("Proveedor");
-				prov.setVisible(true);
-				this.setVisible(false);
-			} else if (evt.getSource() == employee) {
-				Empleado e1 = new Empleado("Empleado");
-				e1.setVisible(true);
-				this.setVisible(false);
-			}
-		}
+
 	}
 
 	// Focus
 	@Override
 	public void focusGained(FocusEvent evt) {
 		if (evt.getSource() == this.product) {
-			this.product.setBackground(bluefocus);
-		} else if (evt.getSource() == this.sale) {
-			this.sale.setBackground(bluefocus);
-		} else if (evt.getSource() == this.provider) {
-			this.provider.setBackground(bluefocus);
-		} else if (evt.getSource() == this.employee) {
-			this.employee.setBackground(bluefocus);
+			this.product.setVisible(false);
+			this.productLabel.setVisible(true);
+			this.sale.setVisible(true);
+			this.saleLabel.setVisible(false);
+			this.employee.setVisible(true);
+			this.employeeLabel.setVisible(false);
+			this.about.setVisible(true);
+			this.aboutLabel.setVisible(false);
+		} 
+		if (evt.getSource() == this.sale) {
+			this.sale.setVisible(false);
+			this.saleLabel.setVisible(true);
+			this.product.setVisible(true);
+			this.productLabel.setVisible(false);
+			this.employee.setVisible(true);
+			this.employeeLabel.setVisible(false);
+			this.about.setVisible(true);
+			this.aboutLabel.setVisible(false);
+		} 
+		if (evt.getSource() == this.employee) {
+			this.employee.setVisible(false);
+			this.employeeLabel.setVisible(true);
+			this.product.setVisible(true);
+			this.productLabel.setVisible(false);
+			this.sale.setVisible(true);
+			this.saleLabel.setVisible(false);
+			this.about.setVisible(true);
+			this.aboutLabel.setVisible(false);
+		}
+		if (evt.getSource() == this.about) {
+			this.about.setVisible(false);
+			this.aboutLabel.setVisible(true);
+			this.product.setVisible(true);
+			this.productLabel.setVisible(false);
+			this.sale.setVisible(true);
+			this.saleLabel.setVisible(false);
+			this.employee.setVisible(true);
+			this.employeeLabel.setVisible(false);
+		}
+		if (evt.getSource() == this.logout) {
+			this.logout.setBackground(redColorEntered);
+		}
+		if (evt.getSource() == this.exit){
+			this.exit.setBackground(redColorEntered);
 		}
 	}
 
 	@Override
 	public void focusLost(FocusEvent evt) {
-		if (evt.getSource() == this.product) {
-			this.product.setBackground(white);
-		} else if (evt.getSource() == this.sale) {
-			this.sale.setBackground(white);
-		} else if (evt.getSource() == this.provider) {
-			this.provider.setBackground(white);
-		} else if (evt.getSource() == this.employee) {
-			this.employee.setBackground(white);
+		if (evt.getSource() == this.productLabel) {
+			this.product.setVisible(true);
+			this.productLabel.setVisible(false);
+		} 
+		if (evt.getSource() == this.saleLabel) {
+			this.sale.setVisible(true);
+			this.saleLabel.setVisible(false);
+		}
+		if (evt.getSource() == this.employeeLabel) {
+			this.employee.setVisible(true);
+			this.employeeLabel.setVisible(false);
+		}
+		if (evt.getSource() == this.aboutLabel) {
+			this.about.setVisible(true);
+			this.aboutLabel.setVisible(false);
+		}
+		if (evt.getSource() == this.logout) {
+			this.logout.setBackground(redColor);
+		}
+		if (evt.getSource() == this.exit){
+			this.exit.setBackground(redColor);
 		}
 	}
 
 	// mouseListener
 	@Override
 	public void mouseReleased(MouseEvent evt) {
-
+		if (evt.getSource().equals(this.closeButton)) {
+			this.dispatchEvent(new WindowEvent(this, WindowEvent.WINDOW_CLOSING));
+		}
+		if (evt.getSource().equals(this.minButton)) {
+			this.setExtendedState(ICONIFIED);
+		}
+		if (evt.getSource().equals(this.logout)) {
+			closeSesion();
+			Login l1 = new Login("Ingresar");
+			l1.setVisible(true);
+			this.setVisible(false);
+		}
+		if (evt.getSource().equals(this.saleLabel)){
+			Cotizacion c1 = new Cotizacion("Cotizaci\u00F3n");
+			c1.setVisible(true);
+			this.setVisible(false);
+		}
+		if (evt.getSource().equals(this.productLabel)){
+			Producto p1 = new Producto("Producto");
+			p1.setVisible(true);
+			this.setVisible(false);
+		}
+		if (evt.getSource().equals(this.employeeLabel)){
+			Empleado e1 = new Empleado("Empleado");
+			e1.setVisible(true);
+			this.setVisible(false);
+		}
+		if (evt.getSource().equals(this.aboutLabel)){
+			panelAbout.setVisible(true);
+			panel.setVisible(false);
+		}
+		if (evt.getSource() == this.exit){
+			panelAbout.setVisible(false);
+			panel.setVisible(true);
+		}
 	}
 
 	@Override
@@ -278,31 +460,65 @@ public class Menu extends JFrame implements ActionListener, KeyListener, FocusLi
 
 	@Override
 	public void mouseExited(MouseEvent evt) {
-		if (evt.getSource() == this.product) {
-			this.product.setBackground(white);
-		} else if (evt.getSource() == this.sale) {
-			this.sale.setBackground(white);
-		} else if (evt.getSource() == this.provider) {
-			this.provider.setBackground(white);
-		} else if (evt.getSource() == this.employee) {
-			this.employee.setBackground(white);
+		if (evt.getSource().equals(this.closeButton)) {
+			this.closeButton.setBackground(barColor);
+		}
+		if (evt.getSource().equals(this.minButton)) {
+			this.minButton.setBackground(barColor);
+		}
+		if (evt.getSource() == this.productLabel) {
+			this.product.setVisible(true);
+			this.productLabel.setVisible(false);
+		} 
+		if (evt.getSource() == this.saleLabel) {
+			this.sale.setVisible(true);
+			this.saleLabel.setVisible(false);
+		} 
+		if (evt.getSource() == this.employeeLabel) {
+			this.employee.setVisible(true);
+			this.employeeLabel.setVisible(false);
+		}
+		if (evt.getSource() == this.aboutLabel) {
+			this.about.setVisible(true);
+			this.aboutLabel.setVisible(false);
+		}
+		if (evt.getSource() == this.logout) {
+			this.logout.setBackground(redColor);
+		}
+		if (evt.getSource() == this.exit){
+			this.exit.setBackground(redColor);
 		}
 	}
 
 	@Override
 	public void mouseEntered(MouseEvent evt) {
-		this.product.setBackground(white);
-		this.sale.setBackground(white);
-		this.provider.setBackground(white);
-		this.employee.setBackground(white);
+		if (evt.getSource().equals(this.closeButton)) {
+			this.closeButton.setBackground(redColor);
+		}
+		if (evt.getSource().equals(this.minButton)) {
+			this.minButton.setBackground(focusColor);
+		}
 		if (evt.getSource() == this.product) {
-			this.product.setBackground(bluefocus);
-		} else if (evt.getSource() == this.sale) {
-			this.sale.setBackground(bluefocus);
-		} else if (evt.getSource() == this.provider) {
-			this.provider.setBackground(bluefocus);
-		} else if (evt.getSource() == this.employee) {
-			this.employee.setBackground(bluefocus);
+			this.product.setVisible(false);
+			this.productLabel.setVisible(true);
+		} 
+		if (evt.getSource() == this.sale) {
+			this.sale.setVisible(false);
+			this.saleLabel.setVisible(true);
+		} 
+		if (evt.getSource() == this.employee) {
+			this.employee.setVisible(false);
+			this.employeeLabel.setVisible(true);
+		}
+		if (evt.getSource() == this.about) {
+			this.about.setVisible(false);
+			this.aboutLabel.setVisible(true);
+		}
+		if (evt.getSource() == this.logout) {
+			this.logout.setBackground(redColorEntered);
+		}
+		if (evt.getSource() == this.exit){
+			this.exit.setBackground(redColorEntered);
 		}
 	}
 
@@ -345,5 +561,22 @@ public class Menu extends JFrame implements ActionListener, KeyListener, FocusLi
 	@Override
 	public void windowOpened(WindowEvent evt) {
 
+	}
+
+	@Override
+	public void mouseDragged(MouseEvent evt) {
+		// TODO Auto-generated method stub
+		if (evt.getSource().equals(this.bar)){
+			int xScreen = evt.getXOnScreen();
+			int yScreen = evt.getYOnScreen();
+			this.setLocation(xScreen - x, yScreen - y);
+		}
+	}
+
+	@Override
+	public void mouseMoved(MouseEvent evt) {
+		// TODO Auto-generated method stub
+		x = evt.getX();
+		y = evt.getY();
 	}
 }

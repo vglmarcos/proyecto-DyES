@@ -6,16 +6,33 @@ import java.util.Calendar;
 
 import javax.swing.table.*;
 
-public class Recibo extends JFrame implements ActionListener, FocusListener, MouseListener, WindowListener {
+public class Recibo extends JFrame implements ActionListener, FocusListener, MouseListener, WindowListener, MouseMotionListener{
 
-    private Color blue = new Color(0, 153, 153);
-    private Color blue2 = new Color(2, 199, 199);
-    private Color blue3= new Color(0, 220, 220);
-    private Color blue4 = new Color(0, 243, 243);
-    private Color bluefocus = new Color(167, 255, 255);
+    private JLabel closeButton, minButton, titleLabel;
+	private Color panel1 = new Color(42, 44, 49);
+	private Color panel2 = new Color(54, 57, 63);
+	private Color fontColor1 = new Color(194, 196, 197);
+	private Color fontColor2 = new Color(134, 138, 143);
+	private Color fieldColor = new Color(48, 51, 57);
+	private Color barColor = new Color(34, 36, 40);
+	private Color redColor = new Color(179, 29, 29);
+	private Color redColorEntered = new Color(148, 27, 27);
+	private Color focusColor = new Color(53, 55, 58);
+	private Color buttonColor = new Color(101, 59, 152);
+	private Color buttonColorEntered = new Color(80, 48, 119);
+	private Color selectedText = new Color(255, 255, 255);
+	private Color selectionColor = new Color(10, 103, 215);
+	private Color textFieldColorEntered = new Color(74, 86, 129);
+	private Color buttonTextColor = new Color(232, 236, 249);
+	private String titlewindow;
+	private Conexion db;
+	private Statement st;
+	private ResultSet rs, rs2;
+	private int x, y;
+    private String patchLogo = "images/Logo.png";
+    private JPanel bar;
 	private Color white = new Color(255, 255, 255);
     private Color black = new Color(0, 0, 0);
-    private Color gray = new Color(224, 224, 224);
     private Calendar fecha;
     private String dia, mes, anio;
     private JLabel logo, dir_em, tel_em, id_rec, fechaLabel, atendido, nom_cliente, dir, tel, corr, head_tabla;
@@ -23,10 +40,7 @@ public class Recibo extends JFrame implements ActionListener, FocusListener, Mou
     private JLabel atendido_txt, nom_cliente_txt, dir_txt, tel_txt, corr_txt, fecha_txt;
     private JTable tabla;
     private DefaultTableModel modelo;
-    private JButton salir, factura;
-    private Conexion db;
-  	private Statement st;
-    private ResultSet rs, rs2;
+    private JLabel salir;
     private Integer id;
     private String idCliente, idEmpleado, idProducto;
     private String idrec, idcl, idemp, idprod, idcot;
@@ -41,6 +55,9 @@ public class Recibo extends JFrame implements ActionListener, FocusListener, Mou
         this.getContentPane().setBackground(white);
         this.setIconImage(new ImageIcon(getClass().getResource("images/Logo.png")).getImage());
         this.addWindowListener(this);
+		this.setUndecorated(true);
+        this.addWindowListener(this);
+        this.titlewindow = title;
 
         //Iniciamos la conexion a la db
     	db = new Conexion();
@@ -58,6 +75,34 @@ public class Recibo extends JFrame implements ActionListener, FocusListener, Mou
         idcl = idCliente;
         idemp = idEmpleado; 
 
+        bar = new JPanel();
+		bar.setBackground(barColor);
+		bar.setBounds(0, 0, 561, 30);
+		bar.setLayout(null);
+		bar.setVisible(true);
+		bar.addMouseMotionListener(this);
+        this.add(bar);
+        
+        titleLabel = new JLabel(titlewindow);
+		titleLabel.setBounds(20, 2, 100, 30);
+		titleLabel.setFont(new Font("Microsoft New Tai Lue", 1, 16));
+		titleLabel.setForeground(fontColor2);
+		bar.add(titleLabel);
+
+		closeButton = new JLabel(new ImageIcon("images/close.png"), SwingConstants.CENTER);
+		closeButton.setBounds(531, 0, 30, 30);
+		closeButton.setOpaque(true);
+		closeButton.setBackground(barColor);
+		closeButton.addMouseListener(this);
+		bar.add(closeButton);
+
+		minButton = new JLabel(new ImageIcon("images/min.png"), SwingConstants.CENTER);
+		minButton.setBounds(501, 0, 30, 30);
+		minButton.setOpaque(true);
+		minButton.setBackground(barColor);
+		minButton.addMouseListener(this);
+		bar.add(minButton);
+
         //obtenemos fecha actual
     	fecha = Calendar.getInstance();
         dia = Integer.valueOf(fecha.get(Calendar.DATE)).toString();
@@ -66,102 +111,102 @@ public class Recibo extends JFrame implements ActionListener, FocusListener, Mou
 
         ImageIcon logo_image = new ImageIcon("./images/logo-fac.png");
         logo = new JLabel(logo_image);
-        logo.setBounds(30, 20, 150, 89);
+        logo.setBounds(30, 50, 150, 89);
         this.add(logo);
 
         dir_em = new JLabel("<html><body>San Feipe No. 2599 Col.San Jorge Monterrey, N.L.</body></html>");
-        dir_em.setBounds(195, 40, 180, 32);
+        dir_em.setBounds(195, 70, 180, 32);
         dir_em.setFont(new Font("Microsoft New Tai Lue", 1, 11 ));
-        dir_em.setForeground(blue);
+        dir_em.setForeground(buttonColor);
         add(dir_em);
 
         tel_em = new JLabel("<html><body><b>Tels: </b>818 708-4664, 83-11-2331</body></html>");
-        tel_em.setBounds(195, 71, 180, 30);
+        tel_em.setBounds(195, 91, 180, 30);
         tel_em.setFont(new Font("Microsoft New Tai Lue", 0, 11));
         tel_em.setForeground(black);
         add(tel_em);
 
         id_rec = new JLabel("Id Recibo: 0");
-        id_rec.setBounds(410, 30, 100, 15);
+        id_rec.setBounds(410, 60, 100, 15);
         id_rec.setFont(new Font("Microsoft New Tai Lue", 1, 11));
         id_rec.setText("Id Recibo:       "+ id.toString()+ "");
         id_rec.setForeground(black);
         add(id_rec);
 
         fechaLabel = new JLabel("Fecha: ");
-    	fechaLabel.setBounds(410, 45, 152, 15);
+    	fechaLabel.setBounds(410, 75, 152, 15);
     	fechaLabel.setFont(new Font("Microsoft New Tai Lue", 0, 11));
 		fechaLabel.setForeground(black);
         add(fechaLabel);
 
         fecha_txt = new JLabel(dia + "/" + mes + "/" + anio);
-        fecha_txt.setBounds(455, 45, 152, 15);
+        fecha_txt.setBounds(455, 75, 152, 15);
     	fecha_txt.setFont(new Font("Microsoft New Tai Lue", 0, 11));
 		fecha_txt.setForeground(black);
         add(fecha_txt);
 
         atendido = new JLabel("Atendido Por: ");
-        atendido.setBounds(30, 115, 100, 15);
+        atendido.setBounds(30, 145, 100, 15);
         atendido.setFont(new Font("Microsoft New Tai Lue", 1 , 11));
         atendido.setBackground(black);
         add(atendido);
 
         atendido_txt = new JLabel("Atendido Por: ");
-        atendido_txt.setBounds(110, 115, 350, 15);
+        atendido_txt.setBounds(110, 145, 350, 15);
         atendido_txt.setFont(new Font("Microsoft New Tai Lue", 0 , 11));
         atendido_txt.setBackground(black);
         add(atendido_txt);
 
         nom_cliente = new JLabel("Receptor: ");
-        nom_cliente.setBounds(30, 133, 70, 15);
+        nom_cliente.setBounds(30, 163, 70, 15);
         nom_cliente.setFont(new Font("Microsoft New Tai Lue", 1, 11));
         nom_cliente.setForeground(black);
         add(nom_cliente);
 
         nom_cliente_txt = new JLabel();
-        nom_cliente_txt.setBounds(90, 133, 180, 15);
+        nom_cliente_txt.setBounds(90, 163, 180, 15);
         nom_cliente_txt.setFont( new Font("Microsoft New Tai Lue", 0, 11));
         nom_cliente_txt.setForeground(black);
         add(nom_cliente_txt);
 
         tel = new JLabel("Tel\u00E9fono: ");
-        tel.setBounds(350, 133, 60, 15);
+        tel.setBounds(350, 163, 60, 15);
         tel.setFont(new Font("Microsoft New Tai Lue", 1, 11));
         tel.setForeground(black);
         add(tel);
 
         tel_txt = new JLabel();
-        tel_txt.setBounds(410, 133, 500, 15);
+        tel_txt.setBounds(410, 163, 500, 15);
         tel_txt.setFont(new Font("Microsoft New Tai Lue", 0, 11));
         tel_txt.setForeground(black);
         add(tel_txt);
 
         dir = new JLabel("Direcci\u00F3n: ");
-        dir.setBounds(30, 151, 60, 15);
+        dir.setBounds(30, 181, 60, 15);
         dir.setFont(new Font("Microsoft New Tai Lue", 1, 11));
         dir.setForeground(black);
         add(dir);
 
         dir_txt = new JLabel();
-        dir_txt.setBounds(90, 151, 390, 15);
+        dir_txt.setBounds(90, 181, 390, 15);
         dir_txt.setFont(new Font("Microsoft New Tai Lue", 0, 11));
         dir_txt.setForeground(black);
         add(dir_txt);
 
         corr = new JLabel("Correo electr\u00F3nico: ");
-        corr.setBounds(30, 169, 110, 15);
+        corr.setBounds(30, 199, 110, 15);
         corr.setFont(new Font("Microsoft New Tai Lue", 1, 11));
         corr.setForeground(black);
         add(corr);
 
         corr_txt = new JLabel("Correo electr\u00F3nico: ");
-        corr_txt.setBounds(140, 169, 390, 15);
+        corr_txt.setBounds(140, 199, 390, 15);
         corr_txt.setFont(new Font("Microsoft New Tai Lue", 0, 11));
         corr_txt.setForeground(black);
         add(corr_txt);
 
         head_tabla = new JLabel("Id     Nombre                                         Tipo             P. Unitario  Dise\u00F1o  Largo  Ancho  Cant    P. total");
-        head_tabla.setBounds(31, 191, 500, 15);
+        head_tabla.setBounds(31, 211, 500, 15);
         head_tabla.setFont(new Font("Microsoft New Tai Lue", 1 ,10));
         head_tabla.setForeground(black);
         add(head_tabla);
@@ -199,7 +244,7 @@ public class Recibo extends JFrame implements ActionListener, FocusListener, Mou
         tabla.setRowHeight(15);
         tabla.getTableHeader().setFont(new Font("Microsoft New Tai Lue", 1, 10));
         tabla.getTableHeader().setForeground(white);
-        tabla.getTableHeader().setBackground(blue);
+        tabla.getTableHeader().setBackground(buttonColor);
         tabla.setBackground(white);
         tabla.setForeground(black);
         tabla.setFont(new Font("Microsoft New Tai Lue", 0, 10));
@@ -247,14 +292,14 @@ public class Recibo extends JFrame implements ActionListener, FocusListener, Mou
         int rowcount;
         rowcount = tabla.getRowCount()*15;
 
-        tabla.setBounds(30, 206, 495, rowcount);
+        tabla.setBounds(30, 236, 495, rowcount);
         tabla.setShowVerticalLines(false);
         tabla.setShowHorizontalLines(true);
         add(tabla);
 
         //abr x2
         int posy;
-        posy = rowcount + 206;
+        posy = rowcount + 236;
 
         sbt = new JLabel("Subtotal: ");
         sbt.setBounds(230, posy + 25, 60, 15);
@@ -317,48 +362,39 @@ public class Recibo extends JFrame implements ActionListener, FocusListener, Mou
         add(pend_txt);
 
         firma_c = new JLabel("FIRMA DEL CLIENTE", SwingConstants.CENTER);
-        firma_c.setBounds(87, 615, 150, 15);
+        firma_c.setBounds(87, 645, 150, 15);
         firma_c.setFont(new Font("Microsoft New Tai Lue", 1, 11));
         firma_c.setForeground(black);
         add(firma_c);
 
         linea_c = new JLabel();
-        linea_c.setBounds(87, 613, 150, 1);
+        linea_c.setBounds(87, 643, 150, 1);
         linea_c.setOpaque(true);
         linea_c.setBackground(black);
         add(linea_c);
 
         firma = new JLabel("AUTORIZADO", SwingConstants.CENTER);
-        firma.setBounds(324, 615, 150, 15);
+        firma.setBounds(324, 645, 150, 15);
         firma.setFont(new Font("Microsoft New Tai Lue", 1, 11));
         firma.setForeground(black);
         add(firma);
 
         linea_f = new JLabel();
-        linea_f.setBounds(324, 613, 150, 1);
+        linea_f.setBounds(324, 643, 150, 1);
         linea_f.setOpaque(true);
         linea_f.setBackground(black);
         add(linea_f);
 
-        salir = new JButton("Salir");
-        salir.setBounds(127, 650, 90, 25);
+        salir = new JLabel("Salir", SwingConstants.CENTER);
+        salir.setBounds(205, 680, 150, 25);
         salir.setFont(new Font("Microsoft New Tai Lue", 1, 14));
-        salir.setBackground(blue);
-        salir.setForeground(white);
-        salir.addActionListener(this);
-        salir.addFocusListener(this);
-        salir.addMouseListener(this);
+        salir.setBorder(BorderFactory.createLineBorder(barColor, 2));
+        salir.setBackground(buttonColor);
+        salir.setForeground(buttonTextColor);
+        salir.setOpaque(true);
+		salir.addFocusListener(this);
+		salir.addMouseListener(this);
         add(salir);
-
-        factura = new JButton("Factura");
-        factura.setBounds(344, 650, 90, 25);
-        factura.setFont(new Font("Microsoft New Tai Lue", 1, 14));
-        factura.setBackground(blue);
-        factura.setForeground(white);
-        factura.addActionListener(this);
-        factura.addFocusListener(this);
-        factura.addMouseListener(this);
-        add(factura);
 
         String nomEmpleado = "";
         String nomCliente = "";
@@ -418,76 +454,51 @@ public class Recibo extends JFrame implements ActionListener, FocusListener, Mou
     //Botones
     @Override
     public void actionPerformed(ActionEvent evt){
-        System.out.println("Se rompe1");
-        if (evt.getSource() == this.salir){
-            try {
-                System.out.println("Se rompe2");
-                System.out.println(id);
-                System.out.println(idprod);
-                System.out.println(idcl);
-                System.out.println(idemp);
-                System.out.println(idcot);
-                String camposRecibo = "'" + id + "', '" + idprod + "', '" + idcl +  "', '" + idemp + "', '" + idcot + "'";
-				st.executeUpdate("INSERT INTO Recibo (id_rec, id_prod, id_cl, id_usu, id_cot)" +
-                " VALUES (" + camposRecibo + ")");
-                db.desconectar();
-                System.out.println("Se rompe");
-                Menu menu = new Menu("Men\u00FA");
-                menu.setVisible(true);
-                this.setVisible(false);
-            } catch (SQLException e) {
-                    JOptionPane.showMessageDialog(null, "Error" + e, "Error", JOptionPane.ERROR_MESSAGE);
-            }
-        } else if (evt.getSource() == this.factura){
-            try {
-                System.out.println("Se rompe2");
-                System.out.println(id);
-                System.out.println(idprod);
-                System.out.println(idcl);
-                System.out.println(idemp);
-                System.out.println(idcot);
-                String camposRecibo = "'" + id + "', '" + idprod + "', '" + idcl +  "', '" + idemp + "', '" + idcot + "'";
-				st.executeUpdate("INSERT INTO Recibo (id_rec, id_prod, id_cl, id_usu, id_cot)" +
-                " VALUES (" + camposRecibo + ")");
-                db.desconectar();
-                System.out.println("Se rompe");
-                System.out.println(id.toString() + idcl + idemp);
-                Factura fac = new Factura("Factura", id.toString(), idcl.toString(), idemp.toString());
-                fac.setVisible(true);
-                this.setVisible(false);
-            } catch (SQLException e) {
-                    JOptionPane.showMessageDialog(null, "Error" + e, "Error", JOptionPane.ERROR_MESSAGE);
-            }
-        }
+
     }
 
 	//Focus
 	@Override
     public void focusGained(FocusEvent evt) {
         if(evt.getSource() == this.salir){
-            this.salir.setBackground(bluefocus);
-            this.salir.setForeground(black);
-        } else if (evt.getSource() == this.factura){
-            this.factura.setBackground(bluefocus);
-            this.factura.setForeground(black);
+            this.salir.setBackground(focusColor);
         }
     }
 
     @Override
     public void focusLost(FocusEvent evt) {
         if(evt.getSource() == this.salir){
-            this.salir.setBackground(blue);
-            this.salir.setForeground(white);
-        } else if (evt.getSource() == this. factura){
-            this.factura.setBackground(blue);
-            this.factura.setForeground(white);
+            this.salir.setBackground(focusColor);
         }
 	}
 
 	//mouse
 	@Override
     public void mouseReleased(MouseEvent evt) {
-
+        if (evt.getSource().equals(this.closeButton)) {
+			this.dispatchEvent(new WindowEvent(this, WindowEvent.WINDOW_CLOSING));
+		}
+		if (evt.getSource().equals(this.minButton)) {
+			this.setExtendedState(ICONIFIED);
+		}
+        if (evt.getSource() == this.salir){
+            try {
+                System.out.println(id);
+                System.out.println(idprod);
+                System.out.println(idcl);
+                System.out.println(idemp);
+                System.out.println(idcot);
+                String camposRecibo = "'" + id + "', '" + idprod + "', '" + idcl +  "', '" + idemp + "', '" + idcot + "'";
+				st.executeUpdate("INSERT INTO Recibo (id_rec, id_prod, id_cl, id_usu, id_cot)" +
+                " VALUES (" + camposRecibo + ")");
+                db.desconectar();
+                Menu menu = new Menu("Men\u00FA");
+                menu.setVisible(true);
+                this.setVisible(false);
+            } catch (SQLException e) {
+                    JOptionPane.showMessageDialog(null, "Error" + e, "Error", JOptionPane.ERROR_MESSAGE);
+            }
+        }
     }
 
     @Override
@@ -498,27 +509,28 @@ public class Recibo extends JFrame implements ActionListener, FocusListener, Mou
     @Override
     public void mouseExited(MouseEvent evt) {
         if(evt.getSource() == this.salir){
-            this.salir.setBackground(blue);
-            this.salir.setForeground(white);
-        } else if (evt.getSource() == this. factura){
-            this.factura.setBackground(blue);
-            this.factura.setForeground(white);
+            this.salir.setBackground(buttonColor);
         }
+        if (evt.getSource().equals(this.closeButton)) {
+			this.closeButton.setBackground(barColor);
+		}
+		if (evt.getSource().equals(this.minButton)) {
+			this.minButton.setBackground(barColor);
+		}
     }
 
     @Override
     public void mouseEntered(MouseEvent evt) {
-        this.salir.setBackground(blue);
-        this.salir.setForeground(white);
-        this.factura.setBackground(blue);
-        this.factura.setForeground(white);
+        this.salir.setBackground(buttonColor);
         if(evt.getSource() == this.salir){
-            this.salir.setBackground(bluefocus);
-            this.salir.setForeground(black);
-        } else if (evt.getSource() == this.factura){
-            this.factura.setBackground(bluefocus);
-            this.factura.setForeground(black);
+            this.salir.setBackground(focusColor);
         }
+        if (evt.getSource().equals(this.closeButton)) {
+			this.closeButton.setBackground(redColor);
+		}
+		if (evt.getSource().equals(this.minButton)) {
+			this.minButton.setBackground(focusColor);
+		}
     }
 
     @Override
@@ -576,6 +588,23 @@ public class Recibo extends JFrame implements ActionListener, FocusListener, Mou
 	public void windowOpened(WindowEvent evt) {
 
 	}
+
+    @Override
+    public void mouseDragged(MouseEvent evt) {
+        // TODO Auto-generated method stub
+        if (evt.getSource().equals(this.bar)){
+			int xScreen = evt.getXOnScreen();
+			int yScreen = evt.getYOnScreen();
+			this.setLocation(xScreen - x, yScreen - y);
+		}
+    }
+
+    @Override
+    public void mouseMoved(MouseEvent evt) {
+        // TODO Auto-generated method stub
+        x = evt.getX();
+		y = evt.getY();
+    }
 
 
 }
