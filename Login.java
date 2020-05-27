@@ -45,6 +45,7 @@ public class Login extends JFrame
 			db.conectar();
 			db.desconectar();
 		} catch (SQLException err) {
+			JOptionPane.showMessageDialog(null, "Error: "+ err, "Error", JOptionPane.ERROR_MESSAGE);
 			System.out.println(err);
 		}
 
