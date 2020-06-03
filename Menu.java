@@ -19,9 +19,6 @@ public class Menu extends JFrame implements ActionListener, KeyListener, FocusLi
 	private Color focusColor = new Color(53, 55, 58);
 	private Color buttonColor = new Color(101, 59, 152);
 	private Color buttonColorEntered = new Color(80, 48, 119);
-	private Color selectedText = new Color(255, 255, 255);
-	private Color selectionColor = new Color(10, 103, 215);
-	private Color textFieldColorEntered = new Color(74, 86, 129);
 	private Color buttonTextColor = new Color(232, 236, 249);
 	private String titlewindow;
 	private Conexion db;

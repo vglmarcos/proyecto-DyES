@@ -15,13 +15,11 @@ public class Producto extends JFrame implements ActionListener, KeyListener, Foc
   private Color fieldColor = new Color(48, 51, 57);
   private Color barColor = new Color(34, 36, 40);
   private Color redColor = new Color(179, 29, 29);
-  private Color redColorEntered = new Color(148, 27, 27);
   private Color focusColor = new Color(53, 55, 58);
   private Color buttonColor = new Color(101, 59, 152);
   private Color buttonColorEntered = new Color(80, 48, 119);
   private Color selectedText = new Color(255, 255, 255);
   private Color selectionColor = new Color(10, 103, 215);
-  private Color textFieldColorEntered = new Color(74, 86, 129);
   private Color buttonTextColor = new Color(232, 236, 249);
   private String titlewindow;
   private Conexion db;
@@ -42,10 +40,11 @@ public class Producto extends JFrame implements ActionListener, KeyListener, Foc
   private JScrollPane scroll;
   private int idDb;
   String consultaProducto, tipoProducto, ordenProducto, tipoOrden;
+  private Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
 
   public Producto(String title) {// constructor
     this.setLayout(null);
-    this.setBounds(0, 0, 1500, 800);
+    this.setSize((int) (screenSize.width * 0.8), (int) (screenSize.width * 0.5));
     this.setLocationRelativeTo(null);
     this.setResizable(false);
     this.setTitle(title);
@@ -71,7 +70,7 @@ public class Producto extends JFrame implements ActionListener, KeyListener, Foc
 
     bar = new JPanel();
     bar.setBackground(barColor);
-    bar.setBounds(0, 0, 1500, 30);
+    bar.setBounds(0, 0, this.getWidth(), 30);
     bar.setLayout(null);
     bar.setVisible(true);
     bar.addMouseMotionListener(this);
@@ -79,14 +78,14 @@ public class Producto extends JFrame implements ActionListener, KeyListener, Foc
 
     // Panel para mostrar
     mostrarResultados = new JPanel();
-    mostrarResultados.setBounds(20, 50, 1460, 730);
+    mostrarResultados.setBounds(20, 50, this.getWidth() - 40, this.getHeight() - 70);
     mostrarResultados.setBackground(panel1);
     mostrarResultados.setLayout(null);
     mostrarResultados.setVisible(true);
 
     // Panel para agregar
     agregarProducto = new JPanel();
-    agregarProducto.setBounds(20, 50, 1460, 730);
+    agregarProducto.setBounds(20, 50, this.getWidth() - 40, this.getHeight() - 70);
     agregarProducto.setBackground(panel1);
     agregarProducto.setLayout(null);
     agregarProducto.setVisible(false);
@@ -98,14 +97,14 @@ public class Producto extends JFrame implements ActionListener, KeyListener, Foc
     bar.add(titleLabel);
 
     closeButton = new JLabel(new ImageIcon("images/close.png"), SwingConstants.CENTER);
-    closeButton.setBounds(1470, 0, 30, 30);
+    closeButton.setBounds(this.bar.getWidth() - 30, 0, 30, 30);
     closeButton.setOpaque(true);
     closeButton.setBackground(barColor);
     closeButton.addMouseListener(this);
     bar.add(closeButton);
 
     minButton = new JLabel(new ImageIcon("images/min.png"), SwingConstants.CENTER);
-    minButton.setBounds(1440, 0, 30, 30);
+    minButton.setBounds(this.bar.getWidth() - 60, 0, 30, 30);
     minButton.setOpaque(true);
     minButton.setBackground(barColor);
     minButton.addMouseListener(this);
@@ -126,14 +125,15 @@ public class Producto extends JFrame implements ActionListener, KeyListener, Foc
     mostrarResultados.add(consulta);
 
     resultados = new JLabel("No se han encontrado resultados para esta b\u00FAsqueda.", SwingConstants.CENTER);
-    resultados.setBounds(50, 415, 1360, 30);
+    resultados.setBounds(0, mostrarResultados.getHeight() / 2, mostrarResultados.getWidth(), 30);
     resultados.setForeground(fontColor1);
     resultados.setFont(new Font("Microsoft New Tai Lue", 0, 24));
     resultados.setVisible(false);
     mostrarResultados.add(resultados);
 
     consulta_txt = new JTextField();
-    consulta_txt.setBounds(200, 111, 400, 40);
+    consulta_txt.setBounds(consulta.getX() + consulta.getWidth(), 
+      111, (this.mostrarResultados.getWidth() / 4) - 20, 40);
     consulta_txt.setBackground(fieldColor);
     consulta_txt.setForeground(fontColor2);// color de la letra
     consulta_txt.setFont(new Font("Microsoft New Tai Lue", 0, 24));// normal, tamaño
@@ -147,13 +147,14 @@ public class Producto extends JFrame implements ActionListener, KeyListener, Foc
     mostrarResultados.add(consulta_txt);
 
     por = new JLabel("por:");
-    por.setBounds(630, 120, 50, 25);
+    por.setBounds(consulta_txt.getX() + consulta_txt.getWidth() + 10, 120, 50, 25);
     por.setForeground(fontColor1);
     por.setFont(new Font("Microsoft New Tai Lue", 0, 24));
     mostrarResultados.add(por);
 
     por_cb = new JComboBox<>();
-    por_cb.setBounds(700, 111, 400, 40);
+    por_cb.setBounds(por.getX() + por.getWidth() + 10, 
+      111, (this.mostrarResultados.getWidth() / 4) - 20, 40);
     por_cb.setBackground(fieldColor);
     por_cb.setForeground(fontColor2);
     por_cb.setFont(new Font("Microsoft New Tai Lue", 0, 24));
@@ -167,13 +168,14 @@ public class Producto extends JFrame implements ActionListener, KeyListener, Foc
     mostrarResultados.add(por_cb);
 
     ordenado = new JLabel("Ordenado por:");
-    ordenado.setBounds(50, 180, 200, 25);
+    ordenado.setBounds(50, 180, 180, 25);
     ordenado.setForeground(fontColor1);
     ordenado.setFont(new Font("Microsoft New Tai Lue", 0, 24));
     mostrarResultados.add(ordenado);
 
     ordenado_cb = new JComboBox<>();
-    ordenado_cb.setBounds(240, 171, 400, 40);
+    ordenado_cb.setBounds(ordenado.getX() + ordenado.getWidth(), 
+      171, (this.mostrarResultados.getWidth() / 4) - 20, 40);
     ordenado_cb.setBackground(fieldColor);
     ordenado_cb.setForeground(fontColor2);
     ordenado_cb.setFont(new Font("Microsoft New Tai Lue", 0, 24));
@@ -189,7 +191,8 @@ public class Producto extends JFrame implements ActionListener, KeyListener, Foc
     mostrarResultados.add(ordenado_cb);
 
     asce_desce = new JComboBox<>();
-    asce_desce.setBounds(700, 171, 400, 40);
+    asce_desce.setBounds(ordenado_cb.getX() + ordenado_cb.getWidth() + 10, 171, 
+      (this.mostrarResultados.getWidth() / 4) - 20, 40);
     asce_desce.setBackground(fieldColor);
     asce_desce.setForeground(fontColor2);
     asce_desce.setFont(new Font("Microsoft New Tai Lue", 0, 24));
@@ -204,7 +207,7 @@ public class Producto extends JFrame implements ActionListener, KeyListener, Foc
     mostrarResultados.add(asce_desce);
 
     buscar = new JLabel("Buscar", SwingConstants.CENTER);
-    buscar.setBounds(1120, 111, 292, 40);
+    buscar.setBounds(this.mostrarResultados.getWidth() - 250, 111, 200, 40);
     buscar.setBackground(buttonColor);
     buscar.setForeground(buttonTextColor);
     buscar.setFont(new Font("Microsoft New Tai Lue", 1, 24));
@@ -216,7 +219,7 @@ public class Producto extends JFrame implements ActionListener, KeyListener, Foc
     mostrarResultados.add(buscar);
 
     filtros = new JLabel("Limpiar", SwingConstants.CENTER);
-    filtros.setBounds(1120, 171, 292, 40);
+    filtros.setBounds(this.mostrarResultados.getWidth() - 250, 171, 200, 40);
     filtros.setBackground(buttonColor);
     filtros.setForeground(buttonTextColor);
     filtros.setFont(new Font("Microsoft New Tai Lue", 1, 24));
@@ -226,42 +229,6 @@ public class Producto extends JFrame implements ActionListener, KeyListener, Foc
     filtros.addKeyListener(this);
     filtros.addMouseListener(this);
     mostrarResultados.add(filtros);
-
-    cancelar = new JLabel("Cancelar", SwingConstants.CENTER);
-    cancelar.setBounds(50, 650, 300, 40);
-    cancelar.setBackground(buttonColor);
-    cancelar.setForeground(buttonTextColor);
-    cancelar.setFont(new Font("Microsoft New Tai lue", 1, 24));
-    cancelar.setBorder(BorderFactory.createLineBorder(barColor, 2));
-    cancelar.setOpaque(true);
-    cancelar.addFocusListener(this);
-    cancelar.addKeyListener(this);
-    cancelar.addMouseListener(this);
-    mostrarResultados.add(cancelar);
-
-    eliminar = new JLabel("Eliminar", SwingConstants.CENTER);
-    eliminar.setBounds(580, 650, 300, 40); // los primeros dos son la posicion y los siguientes dos son el tamaño
-    eliminar.setBackground(buttonColor);
-    eliminar.setForeground(buttonTextColor);
-    eliminar.setFont(new Font("Microsoft New Tai Lue", 1, 24));// nombre de la fuente, tipo de letra, tamaño
-    eliminar.setBorder(BorderFactory.createLineBorder(barColor, 2));
-    eliminar.setOpaque(true);
-    eliminar.addFocusListener(this);
-    eliminar.addKeyListener(this);
-    eliminar.addMouseListener(this);
-    mostrarResultados.add(eliminar);
-
-    agregar = new JLabel("Agregar", SwingConstants.CENTER);
-    agregar.setBounds(1110, 650, 300, 40); // los primeros dos son la posicion y los siguientes dos son el tamaño
-    agregar.setBackground(buttonColor);
-    agregar.setForeground(buttonTextColor);
-    agregar.setFont(new Font("Microsoft New Tai Lue", 1, 24));// nombre de la fuente, tipo de letra, tamaño
-    agregar.setBorder(BorderFactory.createLineBorder(barColor, 2));
-    agregar.setOpaque(true);
-    agregar.addFocusListener(this);
-    agregar.addKeyListener(this);
-    agregar.addMouseListener(this);
-    mostrarResultados.add(agregar);
 
     String[] header = new String[] { "Id", "Nombre", "Precio", "Tipo" };
     modelo = new DefaultTableModel(null, header);
@@ -275,11 +242,11 @@ public class Producto extends JFrame implements ActionListener, KeyListener, Foc
     tabla.getTableHeader().setResizingAllowed(false);
     scroll = new JScrollPane(tabla);
     scroll.getViewport().setBackground(fieldColor);
-    scroll.setBounds(50, 240, 1360, 380);
-    tabla.getColumnModel().getColumn(0).setPreferredWidth(25); // Id
-    tabla.getColumnModel().getColumn(1).setPreferredWidth(500); // Nombre
-    tabla.getColumnModel().getColumn(2).setPreferredWidth(70); // Precio
-    tabla.getColumnModel().getColumn(3).setPreferredWidth(95); // Tipo
+    scroll.setBounds(50, 240, this.mostrarResultados.getWidth() - 100, this.mostrarResultados.getHeight() - 240 - 100);
+    tabla.getColumnModel().getColumn(0).setPreferredWidth((int)((this.mostrarResultados.getWidth() - 100) * 0.15)); // Id
+    tabla.getColumnModel().getColumn(1).setPreferredWidth((int)((this.mostrarResultados.getWidth() - 100) * 0.4)); // Nombre
+    tabla.getColumnModel().getColumn(2).setPreferredWidth((int)((this.mostrarResultados.getWidth() - 100) * 0.15)); // Precio
+    tabla.getColumnModel().getColumn(3).setPreferredWidth((int)((this.mostrarResultados.getWidth() - 100) * 0.15)); // Tipo
     tabla.setRowHeight(25);
     tabla.setAutoResizeMode(JTable.AUTO_RESIZE_LAST_COLUMN);
     tabla.getTableHeader().setFont(new Font("Microsoft New Tai Lue", 1, 24));
@@ -290,6 +257,42 @@ public class Producto extends JFrame implements ActionListener, KeyListener, Foc
     tabla.setFont(new Font("Microsoft New Tai Lue", 0, 24));
     mostrarResultados.add(scroll);
 
+    agregar = new JLabel("Agregar", SwingConstants.CENTER);
+    agregar.setBounds(this.mostrarResultados.getWidth() - 250, this.scroll.getY() + this.scroll.getHeight() + 30, 200, 40); // los primeros dos son la posicion y los siguientes dos son el tamaño
+    agregar.setBackground(buttonColor);
+    agregar.setForeground(buttonTextColor);
+    agregar.setFont(new Font("Microsoft New Tai Lue", 1, 24));// nombre de la fuente, tipo de letra, tamaño
+    agregar.setBorder(BorderFactory.createLineBorder(barColor, 2));
+    agregar.setOpaque(true);
+    agregar.addFocusListener(this);
+    agregar.addKeyListener(this);
+    agregar.addMouseListener(this);
+    mostrarResultados.add(agregar);
+
+    eliminar = new JLabel("Eliminar", SwingConstants.CENTER);
+    eliminar.setBounds(this.agregar.getX() - 220, this.agregar.getY(), 200, 40); // los primeros dos son la posicion y los siguientes dos son el tamaño
+    eliminar.setBackground(buttonColor);
+    eliminar.setForeground(buttonTextColor);
+    eliminar.setFont(new Font("Microsoft New Tai Lue", 1, 24));// nombre de la fuente, tipo de letra, tamaño
+    eliminar.setBorder(BorderFactory.createLineBorder(barColor, 2));
+    eliminar.setOpaque(true);
+    eliminar.addFocusListener(this);
+    eliminar.addKeyListener(this);
+    eliminar.addMouseListener(this);
+    mostrarResultados.add(eliminar);
+
+    cancelar = new JLabel("Cancelar", SwingConstants.CENTER);
+    cancelar.setBounds(this.eliminar.getX() - 220, this.eliminar.getY(), 200, 40);
+    cancelar.setBackground(buttonColor);
+    cancelar.setForeground(buttonTextColor);
+    cancelar.setFont(new Font("Microsoft New Tai lue", 1, 24));
+    cancelar.setBorder(BorderFactory.createLineBorder(barColor, 2));
+    cancelar.setOpaque(true);
+    cancelar.addFocusListener(this);
+    cancelar.addKeyListener(this);
+    cancelar.addMouseListener(this);
+    mostrarResultados.add(cancelar);
+
     // Visualizar Paneles
     this.add(mostrarResultados);
     this.add(agregarProducto);
@@ -297,19 +300,19 @@ public class Producto extends JFrame implements ActionListener, KeyListener, Foc
     // Panel Agregar
 
     agreProducto = new JLabel("Agregar producto");
-    agreProducto.setBounds(50, 90, 400, 40);
+    agreProducto.setBounds(50, 60, 400, 40);
     agreProducto.setForeground(fontColor1);
     agreProducto.setFont(new Font("Microsoft New Tai Lue", 1, 30));
     agregarProducto.add(agreProducto);
 
     id_prod = new JLabel("Id Producto");
-    id_prod.setBounds(50, 210, 150, 25);
+    id_prod.setBounds(50, 200, 150, 25);
     id_prod.setForeground(fontColor1);
     id_prod.setFont(new Font("Microsoft New Tai Lue", 0, 24));
     agregarProducto.add(id_prod);
 
     id_txt = new JTextField(String.valueOf(idDb), SwingConstants.CENTER);
-    id_txt.setBounds(230, 201, 200, 40);
+    id_txt.setBounds(id_prod.getX() + id_prod.getWidth() + 20, id_prod.getY() + 1, 200, 40);
     id_txt.setBackground(fieldColor);
     id_txt.setForeground(fontColor2);// color de la letra
     id_txt.setFont(new Font("Microsoft New Tai Lue", 0, 24));// normal, tamaño
@@ -324,13 +327,13 @@ public class Producto extends JFrame implements ActionListener, KeyListener, Foc
     agregarProducto.add(id_txt);
 
     nombre = new JLabel("Nombre");
-    nombre.setBounds(50, 335, 100, 25);
+    nombre.setBounds(50, this.id_prod.getY() + id_prod.getHeight() + 40, 150, 25);
     nombre.setForeground(fontColor1);
     nombre.setFont(new Font("Microsoft New Tai Lue", 0, 24));
     agregarProducto.add(nombre);
 
     nombre_txt = new JTextField();
-    nombre_txt.setBounds(210, 326, 640, 40);
+    nombre_txt.setBounds(id_prod.getX() + id_prod.getWidth() + 20, nombre.getY() + 1, 200, 40);
     nombre_txt.setBackground(fieldColor);
     nombre_txt.setForeground(fontColor2);// color de la letra
     nombre_txt.setFont(new Font("Microsoft New Tai Lue", 0, 24));// normal, tamaño
@@ -344,13 +347,13 @@ public class Producto extends JFrame implements ActionListener, KeyListener, Foc
     agregarProducto.add(nombre_txt);
 
     tipo = new JLabel("Tipo");
-    tipo.setBounds(50, 465, 70, 25);
+    tipo.setBounds(50, nombre.getY() + nombre.getHeight() + 40, 150, 25);
     tipo.setForeground(fontColor1);
     tipo.setFont(new Font("Microsoft New Tai Lue", 0, 24));
     agregarProducto.add(tipo);
 
     tipo_txt = new JTextField();
-    tipo_txt.setBounds(175, 456, 300, 40);
+    tipo_txt.setBounds(tipo.getX() + tipo.getWidth() + 20, tipo.getY() + 1, 200, 40);
     tipo_txt.setBackground(fieldColor);
     tipo_txt.setForeground(fontColor2);// color de la letra
     tipo_txt.setFont(new Font("Microsoft New Tai Lue", 0, 24));// normal, tamaño
@@ -364,13 +367,13 @@ public class Producto extends JFrame implements ActionListener, KeyListener, Foc
     agregarProducto.add(tipo_txt);
 
     precio = new JLabel("Precio $");
-    precio.setBounds(520, 465, 100, 25);
+    precio.setBounds(50, tipo.getY() + tipo.getHeight() + 40, 150, 25);
     precio.setForeground(fontColor1);
     precio.setFont(new Font("Microsoft New Tai Lue", 0, 24));
     agregarProducto.add(precio);
 
     precio_txt = new JTextField("", SwingConstants.RIGHT);
-    precio_txt.setBounds(650, 456, 200, 40);
+    precio_txt.setBounds(precio.getX() + precio.getWidth() + 20, precio.getY() + 1, 200, 40);
     precio_txt.setBackground(fieldColor);
     precio_txt.setForeground(fontColor2);// color de la letra
     precio_txt.setFont(new Font("Microsoft New Tai Lue", 0, 24));// normal, tamaño
@@ -384,7 +387,9 @@ public class Producto extends JFrame implements ActionListener, KeyListener, Foc
     agregarProducto.add(precio_txt);
 
     product = new JLabel("", SwingConstants.CENTER);
-    product.setBounds(950, 90, 460, 550);
+    product.setBounds(nombre_txt.getX() + nombre_txt.getWidth() + 100, 50
+      , agregarProducto.getHeight() - 100, 
+      agregarProducto.getHeight() - 100);
     product.setIcon(productImg);
     product.setHorizontalTextPosition(SwingConstants.CENTER);
     product.setVerticalTextPosition(SwingConstants.CENTER);
@@ -394,7 +399,7 @@ public class Producto extends JFrame implements ActionListener, KeyListener, Foc
     agregarProducto.add(product);
 
     regresar = new JLabel("Regresar", SwingConstants.CENTER);
-    regresar.setBounds(50, 600, 300, 40); // los primeros dos son la posicion y los siguientes dos son el tamaño
+    regresar.setBounds(50, this.agregarProducto.getHeight() - 80, 200, 40); // los primeros dos son la posicion y los siguientes dos son el tamaño
     regresar.setBackground(buttonColor);
     regresar.setForeground(buttonTextColor);
     regresar.setFont(new Font("Microsoft New Tai Lue", 1, 24));// nombre de la fuente, tipo de letra, tamaño
@@ -406,7 +411,7 @@ public class Producto extends JFrame implements ActionListener, KeyListener, Foc
     agregarProducto.add(regresar);
 
     guardar = new JLabel("Guardar", SwingConstants.CENTER);
-    guardar.setBounds(550, 600, 300, 40); // los primeros dos son la posicion y los siguientes dos son el tamaño
+    guardar.setBounds(regresar.getX() + regresar.getWidth() + 20, this.regresar.getY(), 200, 40); // los primeros dos son la posicion y los siguientes dos son el tamaño
     guardar.setBackground(buttonColor);
     guardar.setForeground(buttonTextColor);
     guardar.setFont(new Font("Microsoft New Tai Lue", 1, 24));// nombre de la fuente, tipo de letra, tamaño
