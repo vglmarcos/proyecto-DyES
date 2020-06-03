@@ -43,10 +43,11 @@ public class Menu extends JFrame implements ActionListener, KeyListener, FocusLi
 	private ImageIcon logomenuImg = new ImageIcon(patchlogomenu);
 	private JLabel logo, product, sale, employee, about, logout, appname;
 	private JLabel systemName, javaVersion, systemVersion, enterpriseName, enterpriseDir, enterpriseTel, exit;
+	private Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
 
 	public Menu(String title) {
 		this.setLayout(null);
-		this.setBounds(0, 0, 1500, 800);
+		this.setSize((int) (screenSize.width * 0.8), (int) (screenSize.width * 0.5));
 		this.setLocationRelativeTo(null);
 		this.setResizable(false);
 		this.setTitle(title);
@@ -68,7 +69,7 @@ public class Menu extends JFrame implements ActionListener, KeyListener, FocusLi
 
 		bar = new JPanel();
 		bar.setBackground(barColor);
-		bar.setBounds(0, 0, 1500, 30);
+		bar.setBounds(0, 0, this.getWidth(), 30);
 		bar.setLayout(null);
 		bar.setVisible(true);
 		bar.addMouseMotionListener(this);
@@ -76,7 +77,7 @@ public class Menu extends JFrame implements ActionListener, KeyListener, FocusLi
 
 		panel = new JPanel();
 		panel.setBackground(panel1);
-		panel.setBounds(20, 50, 1460, 730);
+		panel.setBounds(20, 50, this.getWidth() - 40, this.getHeight() - 70);
 		panel.setLayout(null);
 		panel.setBorder(BorderFactory.createLineBorder(barColor, 2));
 		panel.setVisible(true);
@@ -84,7 +85,7 @@ public class Menu extends JFrame implements ActionListener, KeyListener, FocusLi
 
 		panelsystem = new JPanel();
 		panelsystem.setBackground(fieldColor);
-		panelsystem.setBounds(50, 77, 1360, 299);
+		panelsystem.setBounds(50, 80, this.panel.getWidth() - 100, this.panel.getHeight() - (this.panel.getHeight() - 250));
 		panelsystem.setLayout(null);
 		panelsystem.setBorder(BorderFactory.createLineBorder(barColor, 2));
 		panelsystem.setVisible(true);
@@ -92,7 +93,7 @@ public class Menu extends JFrame implements ActionListener, KeyListener, FocusLi
 
 		panelAbout = new JPanel();
 		panelAbout.setBackground(panel1);
-		panelAbout.setBounds(20, 50, 1460, 730);
+		panelAbout.setBounds(20, 50, this.getWidth() - 40, this.getHeight() - 70);
 		panelAbout.setLayout(null);
 		panelAbout.setBorder(BorderFactory.createLineBorder(barColor, 2));
 		panelAbout.setVisible(false);
@@ -105,27 +106,27 @@ public class Menu extends JFrame implements ActionListener, KeyListener, FocusLi
 		bar.add(titleLabel);
 
 		closeButton = new JLabel(new ImageIcon("images/close.png"), SwingConstants.CENTER);
-		closeButton.setBounds(1470, 0, 30, 30);
+		closeButton.setBounds(this.bar.getWidth() - 30, 0, 30, 30);
 		closeButton.setOpaque(true);
 		closeButton.setBackground(barColor);
 		closeButton.addMouseListener(this);
 		bar.add(closeButton);
 
 		minButton = new JLabel(new ImageIcon("images/min.png"), SwingConstants.CENTER);
-		minButton.setBounds(1440, 0, 30, 30);
+		minButton.setBounds(this.bar.getWidth() - 60, 0, 30, 30);
 		minButton.setOpaque(true);
 		minButton.setBackground(barColor);
 		minButton.addMouseListener(this);
 		bar.add(minButton);
 
 		appname = new JLabel("Kardient", SwingConstants.CENTER);
-		appname.setBounds(0, 40, 1360, 219);
-		appname.setFont(new Font("Microsoft New Tai Lue", 1, 70));
+		appname.setBounds(0, 0, this.panelsystem.getWidth(), this.panelsystem.getHeight());
+		appname.setFont(new Font("Microsoft New Tai Lue", 1, 60));
 		appname.setForeground(fontColor1);
 		panelsystem.add(appname);
 
-		logout = new JLabel("Cerrar Sesi\u00f3n",SwingConstants.CENTER);
-		logout.setBounds(1190, 20, 250, 40);
+		logout = new JLabel("Cerrar sesi\u00f3n",SwingConstants.CENTER);
+		logout.setBounds(this.panel.getWidth() - 300, 20, 250, 40);
 		logout.setFont(new Font("Microsoft New Tai Lue", 1, 22));
 		logout.setForeground(buttonTextColor);
 		logout.setBorder(BorderFactory.createLineBorder(barColor, 2));
@@ -135,7 +136,8 @@ public class Menu extends JFrame implements ActionListener, KeyListener, FocusLi
 		panel.add(logout);
 
 		product = new JLabel("", SwingConstants.CENTER);
-		product.setBounds(50, 430, 250, 250);
+		product.setBounds(50, this.panelsystem.getY() + this.panelsystem.getHeight() + 20, 
+			(this.panel.getWidth() - 130) / 4, (this.panel.getWidth() - 130) / 4);
 		product.setBackground(buttonColor);
 		product.setIcon(productImg);
 		product.setHorizontalTextPosition(SwingConstants.CENTER);
@@ -148,7 +150,8 @@ public class Menu extends JFrame implements ActionListener, KeyListener, FocusLi
 		panel.add(product);
 
 		productLabel = new JLabel("Productos", SwingConstants.CENTER);
-		productLabel.setBounds(50, 430, 250, 250);
+		productLabel.setBounds(50, this.panelsystem.getY() + this.panelsystem.getHeight() + 20, 
+			(this.panel.getWidth() - 130) / 4, (this.panel.getWidth() - 130) / 4);
 		productLabel.setFont(new Font("Microsoft New Tai Lue", 1, 40));
 		productLabel.setForeground(buttonTextColor);
 		productLabel.setBackground(buttonColorEntered);
@@ -161,7 +164,9 @@ public class Menu extends JFrame implements ActionListener, KeyListener, FocusLi
 		panel.add(productLabel);
 
 		sale = new JLabel("", SwingConstants.CENTER);
-		sale.setBounds(420, 430, 250, 250);
+		sale.setBounds(this.product.getX() + this.product.getWidth() + 10, 
+			this.panelsystem.getY() + this.panelsystem.getHeight() + 20, 
+			(this.panel.getWidth() - 130) / 4, (this.panel.getWidth() - 130) / 4);
 		sale.setBackground(buttonColor);
 		sale.setIcon(saleImg);
 		sale.setHorizontalTextPosition(SwingConstants.CENTER);
@@ -174,7 +179,9 @@ public class Menu extends JFrame implements ActionListener, KeyListener, FocusLi
 		panel.add(sale);
 
 		saleLabel = new JLabel("Cotizaci\u00F3n", SwingConstants.CENTER);
-		saleLabel.setBounds(420, 430, 250, 250);
+		saleLabel.setBounds(this.product.getX() + this.product.getWidth() + 10, 
+			this.panelsystem.getY() + this.panelsystem.getHeight() + 20, 
+			(this.panel.getWidth() - 130) / 4, (this.panel.getWidth() - 130) / 4);
 		saleLabel.setFont(new Font("Microsoft New Tai Lue", 1, 40));
 		saleLabel.setForeground(buttonTextColor);
 		saleLabel.setBackground(buttonColorEntered);
@@ -187,7 +194,9 @@ public class Menu extends JFrame implements ActionListener, KeyListener, FocusLi
 		panel.add(saleLabel);
 
 		employee = new JLabel("", SwingConstants.CENTER);
-		employee.setBounds(790, 430, 250, 250);
+		employee.setBounds(this.sale.getX() + this.sale.getWidth() + 10, 
+			this.panelsystem.getY() + this.panelsystem.getHeight() + 20, 
+			(this.panel.getWidth() - 130) / 4, (this.panel.getWidth() - 130) / 4);
 		employee.setBackground(buttonColor);
 		employee.setIcon(employeeImg);
 		employee.setHorizontalTextPosition(SwingConstants.CENTER);
@@ -200,7 +209,9 @@ public class Menu extends JFrame implements ActionListener, KeyListener, FocusLi
 		panel.add(employee);
 
 		employeeLabel = new JLabel("Empleados", SwingConstants.CENTER);
-		employeeLabel.setBounds(790, 430, 250, 250);
+		employeeLabel.setBounds(this.sale.getX() + this.sale.getWidth() + 10, 
+			this.panelsystem.getY() + this.panelsystem.getHeight() + 20, 
+			(this.panel.getWidth() - 130) / 4, (this.panel.getWidth() - 130) / 4);
 		employeeLabel.setFont(new Font("Microsoft New Tai Lue", 1, 40));
 		employeeLabel.setForeground(buttonTextColor);
 		employeeLabel.setBackground(buttonColorEntered);
@@ -213,7 +224,9 @@ public class Menu extends JFrame implements ActionListener, KeyListener, FocusLi
 		panel.add(employeeLabel);
 
 		about = new JLabel("", SwingConstants.CENTER);
-		about.setBounds(1160, 430, 250, 250);
+		about.setBounds(this.employee.getX() + this.employee.getWidth() + 10, 
+			this.panelsystem.getY() + this.panelsystem.getHeight() + 20, 
+			(this.panel.getWidth() - 130) / 4, (this.panel.getWidth() - 130) / 4);
 		about.setBackground(buttonColor);
 		about.setIcon(aboutImg);
 		about.setHorizontalTextPosition(SwingConstants.CENTER);
@@ -226,7 +239,9 @@ public class Menu extends JFrame implements ActionListener, KeyListener, FocusLi
 		panel.add(about);
 
 		aboutLabel = new JLabel("Acerda de", SwingConstants.CENTER);
-		aboutLabel.setBounds(1160, 430, 250, 250);
+		aboutLabel.setBounds(this.employee.getX() + this.employee.getWidth() + 10, 
+			this.panelsystem.getY() + this.panelsystem.getHeight() + 20, 
+			(this.panel.getWidth() - 130) / 4, (this.panel.getWidth() - 130) / 4);
 		aboutLabel.setFont(new Font("Microsoft New Tai Lue", 1, 40));
 		aboutLabel.setForeground(buttonTextColor);
 		aboutLabel.setBackground(buttonColorEntered);
@@ -239,7 +254,7 @@ public class Menu extends JFrame implements ActionListener, KeyListener, FocusLi
 		panel.add(aboutLabel);
 
 		exit = new JLabel("Regresar", SwingConstants.CENTER);
-		exit.setBounds(1190, 20, 250, 40);
+		exit.setBounds(this.panelAbout.getWidth() - 300, 20, 250, 40);
 		exit.setFont(new Font("Microsoft New Tai Lue", 1, 24));
 		exit.setBackground(redColor);
 		exit.setForeground(buttonTextColor);
@@ -251,44 +266,50 @@ public class Menu extends JFrame implements ActionListener, KeyListener, FocusLi
 		panelAbout.add(exit);
 
 		systemName = new JLabel("Kardient", SwingConstants.CENTER);
-		systemName.setBounds(0, 80, 1460, 70);
+		systemName.setBounds(0, 80, this.panelAbout.getWidth(), 70);
 		systemName.setFont(new Font("Microsoft New Tai Lue", 1, 60));
 		systemName.setForeground(fontColor1);
 		panelAbout.add(systemName);
 
 		systemVersion = new JLabel("Versi\u00f3n 1.0", SwingConstants.CENTER);
-		systemVersion.setBounds(0, 190, 1460, 40);
+		systemVersion.setBounds(0, this.systemName.getY() + this.systemName.getHeight() + 20, 
+			this.panelAbout.getWidth(), 40);
 		systemVersion.setFont(new Font("Microsoft New Tai Lue", 1, 30));
 		systemVersion.setForeground(fontColor1);
 		panelAbout.add(systemVersion);
 
 		javaVersion = new JLabel("Sistema creado en la versi\u00f3n 1.8.0_251 de JAVA", SwingConstants.CENTER);
-		javaVersion.setBounds(0, 270, 1460, 40);
+		javaVersion.setBounds(0, this.systemVersion.getY() + this.systemVersion.getHeight() + 20, 
+			this.panelAbout.getWidth(), 40);
 		javaVersion.setFont(new Font("Microsoft New Tai Lue", 1, 30));
 		javaVersion.setForeground(fontColor1);
 		panelAbout.add(javaVersion);
 
 		logo = new JLabel("", SwingConstants.CENTER);
-		logo.setBounds(0, 340, 1460, 133);
+		logo.setBounds(0, this.javaVersion.getY() + this.javaVersion.getHeight() + 20, 
+			this.panelAbout.getWidth(), 140);
 		logo.setIcon(logomenuImg);
 		logo.setHorizontalTextPosition(SwingConstants.CENTER);
 		logo.setVerticalTextPosition(SwingConstants.CENTER);
 		panelAbout.add(logo);
 
 		enterpriseName = new JLabel("Cristaler\u00eda San Rom\u00e1n", SwingConstants.CENTER);
-		enterpriseName.setBounds(0, 500, 1460, 40);
+		enterpriseName.setBounds(0, this.logo.getY() + this.logo.getHeight() + 20, 
+			this.panelAbout.getWidth(), 40);
 		enterpriseName.setFont(new Font("Microsoft New Tai Lue", 1, 30));
 		enterpriseName.setForeground(fontColor1);
 		panelAbout.add(enterpriseName);
 
 		enterpriseDir = new JLabel("San Feipe No. 2599 Col.San Jorge Monterrey, N.L.", SwingConstants.CENTER);
-		enterpriseDir.setBounds(0, 570, 1460, 40);
+		enterpriseDir.setBounds(0, this.enterpriseName.getY() + this.enterpriseName.getHeight() + 20, 
+			this.panelAbout.getWidth(), 40);
 		enterpriseDir.setFont(new Font("Microsoft New Tai Lue", 1, 30));
 		enterpriseDir.setForeground(fontColor1);
 		panelAbout.add(enterpriseDir);
 
 		enterpriseTel = new JLabel("Tels: 818 708-4664, 83-11-2331", SwingConstants.CENTER);
-		enterpriseTel.setBounds(0, 640, 1460, 40);
+		enterpriseTel.setBounds(0, this.enterpriseDir.getY() + this.enterpriseDir.getHeight() + 20, 
+			this.panelAbout.getWidth(), 40);
 		enterpriseTel.setFont(new Font("Microsoft New Tai Lue", 1, 30));
 		enterpriseTel.setForeground(fontColor1);
 		panelAbout.add(enterpriseTel);

@@ -36,6 +36,7 @@ public class Login extends JFrame
 	private JTextField userRegisterField, emailRegisterField, nameRegisterField, lastnameRegisterField;
 	private JPasswordField passwordRegisterField, passwordRegisterConfirmField;
 	private JLabel tira1, tira2, seePassword, passwordRegisterConfirm, seePassword2;
+	private Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
 
 	public Login(String title) {
 
@@ -50,7 +51,7 @@ public class Login extends JFrame
 		}
 
 		this.setLayout(null);
-		this.setBounds(0, 0, 500, 600);
+		this.setSize((int) (screenSize.width * 0.37), (int) (screenSize.width * 0.45));
 		this.setLocationRelativeTo(null);
 		this.setResizable(false);
 		this.setTitle(title);
@@ -63,7 +64,7 @@ public class Login extends JFrame
 
 		bar = new JPanel();
 		bar.setBackground(barColor);
-		bar.setBounds(0, 0, 500, 30);
+		bar.setBounds(0, 0, this.getWidth(), 30);
 		bar.setLayout(null);
 		bar.setVisible(true);
 		bar.addMouseMotionListener(this);
@@ -71,7 +72,7 @@ public class Login extends JFrame
 
 		panel = new JPanel();
 		panel.setBackground(panel1);
-		panel.setBounds(20, 50, 460, 530);
+		panel.setBounds(20, 60, this.getWidth() - 40, this.getHeight() - 90);
 		panel.setLayout(null);
 		panel.setBorder(BorderFactory.createLineBorder(barColor, 2));
 		panel.setVisible(true);
@@ -79,7 +80,7 @@ public class Login extends JFrame
 
 		panelRegister = new JPanel();
 		panelRegister.setBackground(panel1);
-		panelRegister.setBounds(20, 90, 460, 490);
+		panelRegister.setBounds(20, 90, this.getWidth() - 40, this.getHeight() - 120);
 		panelRegister.setLayout(null);
 		panelRegister.setBorder(BorderFactory.createLineBorder(barColor, 2));
 		panelRegister.setVisible(false);
@@ -87,7 +88,7 @@ public class Login extends JFrame
 
 		finalPanel = new JPanel();
 		finalPanel.setBackground(panel1);
-		finalPanel.setBounds(20, 90, 460, 490);
+		finalPanel.setBounds(20, 90, this.getWidth() - 40, this.getHeight() - 120);
 		finalPanel.setLayout(null);
 		finalPanel.setBorder(BorderFactory.createLineBorder(barColor, 2));
 		finalPanel.setVisible(false);
@@ -100,21 +101,21 @@ public class Login extends JFrame
 		bar.add(titleLabel);
 
 		closeButton = new JLabel(new ImageIcon("images/close.png"), SwingConstants.CENTER);
-		closeButton.setBounds(470, 0, 30, 30);
+		closeButton.setBounds(this.bar.getWidth() - 30, 0, 30, 30);
 		closeButton.setOpaque(true);
 		closeButton.setBackground(barColor);
 		closeButton.addMouseListener(this);
 		bar.add(closeButton);
 
 		minButton = new JLabel(new ImageIcon("images/min.png"), SwingConstants.CENTER);
-		minButton.setBounds(440, 0, 30, 30);
+		minButton.setBounds(this.bar.getWidth() - 60, 0, 30, 30);
 		minButton.setOpaque(true);
 		minButton.setBackground(barColor);
 		minButton.addMouseListener(this);
 		bar.add(minButton);
 
 		tira1 = new JLabel();
-		tira1.setBounds(20, 55, 220, 20);
+		tira1.setBounds(20, 55, ((this.getWidth() - 40) / 2) - 5, 20);
 		tira1.setFont(new Font("Microsoft New Tai Lue", 1, 16));
 		tira1.setForeground(fontColor2);
 		tira1.setOpaque(true);
@@ -123,7 +124,7 @@ public class Login extends JFrame
 		this.add(tira1);
 
 		tira2 = new JLabel();
-		tira2.setBounds(260, 55, 220, 20);
+		tira2.setBounds(tira1.getWidth() + tira1.getX() + 10, 55, ((this.getWidth() - 40) / 2) - 5, 20);
 		tira2.setFont(new Font("Microsoft New Tai Lue", 1, 16));
 		tira2.setForeground(fontColor2);
 		tira2.setOpaque(true);
@@ -132,7 +133,7 @@ public class Login extends JFrame
 		this.add(tira2);
 
 		welcomeLabel = new JLabel("\u00A1Bienvenido!", SwingConstants.CENTER);
-		welcomeLabel.setBounds(0, 50, 460, 60);
+		welcomeLabel.setBounds(0, 50, this.panel.getWidth(), 60);
 		welcomeLabel.setFont(new Font("Microsoft New Tai Lue", 1, 36));
 		welcomeLabel.setForeground(fontColor2);
 		panel.add(welcomeLabel);
@@ -144,7 +145,7 @@ public class Login extends JFrame
 		panel.add(user);
 
 		userField = new JTextField();
-		userField.setBounds(20, 195, 420, 40);
+		userField.setBounds(20, 195, this.panel.getWidth() - 40, 40);
 		userField.setBackground(fieldColor);
 		userField.setFont(new Font("Microsoft New Tai Lue", 0, 18));
 		userField.setForeground(fontColor1);
@@ -171,7 +172,7 @@ public class Login extends JFrame
 		panel.add(seePassword2);
 
 		passwordField = new JPasswordField();
-		passwordField.setBounds(20, 290, 420, 40);
+		passwordField.setBounds(20, 290, this.panel.getWidth() - 40, 40);
 		passwordField.setBackground(fieldColor);
 		passwordField.setForeground(fontColor1);
 		passwordField.setCaretColor(new Color(255, 255, 255));
@@ -184,7 +185,7 @@ public class Login extends JFrame
 		panel.add(passwordField);
 
 		signIn = new JLabel("Ingresar", SwingConstants.CENTER);
-		signIn.setBounds(20, 400, 420, 40);
+		signIn.setBounds(20, 400, this.panel.getWidth() - 40, 40);
 		signIn.setFont(new Font("Microsoft New Tai Lue", 1, 16));
 		signIn.setForeground(buttonTextColor);
 		signIn.setBackground(buttonColor);
@@ -227,7 +228,7 @@ public class Login extends JFrame
 		panelRegister.add(nameRegister);
 
 		nameRegisterField = new JTextField();
-		nameRegisterField.setBounds(20, 120, 420, 40);
+		nameRegisterField.setBounds(20, 120, this.panel.getWidth() - 40, 40);
 		nameRegisterField.setBackground(fieldColor);
 		nameRegisterField.setFont(new Font("Microsoft New Tai Lue", 0, 18));
 		nameRegisterField.setForeground(fontColor1);
@@ -246,7 +247,7 @@ public class Login extends JFrame
 		panelRegister.add(lastnameRegister);
 
 		lastnameRegisterField = new JTextField();
-		lastnameRegisterField.setBounds(20, 230, 420, 40);
+		lastnameRegisterField.setBounds(20, 230, this.panel.getWidth() - 40, 40);
 		lastnameRegisterField.setBackground(fieldColor);
 		lastnameRegisterField.setFont(new Font("Microsoft New Tai Lue", 0, 18));
 		lastnameRegisterField.setForeground(fontColor1);
@@ -265,7 +266,7 @@ public class Login extends JFrame
 		panelRegister.add(emailRegister);
 
 		emailRegisterField = new JTextField();
-		emailRegisterField.setBounds(20, 340, 420, 40);
+		emailRegisterField.setBounds(20, 340, this.panel.getWidth() - 40, 40);
 		emailRegisterField.setBackground(fieldColor);
 		emailRegisterField.setFont(new Font("Microsoft New Tai Lue", 0, 18));
 		emailRegisterField.setForeground(fontColor1);
@@ -278,7 +279,7 @@ public class Login extends JFrame
 		panelRegister.add(emailRegisterField);
 
 		nextButton = new JLabel("Siguiente", SwingConstants.CENTER);
-		nextButton.setBounds(20, 420, 420, 40);
+		nextButton.setBounds(20, 420, this.panel.getWidth() - 40, 40);
 		nextButton.setFont(new Font("Microsoft New Tai Lue", 1, 16));
 		nextButton.setForeground(buttonTextColor);
 		nextButton.setBackground(buttonColor);
@@ -305,7 +306,7 @@ public class Login extends JFrame
 		finalPanel.add(userRegister);
 
 		userRegisterField = new JTextField();
-		userRegisterField.setBounds(20, 120, 420, 40);
+		userRegisterField.setBounds(20, 120, this.panel.getWidth() - 40, 40);
 		userRegisterField.setBackground(fieldColor);
 		userRegisterField.setFont(new Font("Microsoft New Tai Lue", 0, 18));
 		userRegisterField.setForeground(fontColor1);
@@ -331,7 +332,7 @@ public class Login extends JFrame
 		finalPanel.add(seePassword);
 
 		passwordRegisterField = new JPasswordField();
-		passwordRegisterField.setBounds(20, 230, 420, 40);
+		passwordRegisterField.setBounds(20, 230, this.panel.getWidth() - 40, 40);
 		passwordRegisterField.setBackground(fieldColor);
 		passwordRegisterField.setFont(new Font("Microsoft New Tai Lue", 0, 18));
 		passwordRegisterField.setForeground(fontColor1);
@@ -350,7 +351,7 @@ public class Login extends JFrame
 		finalPanel.add(passwordRegisterConfirm);
 
 		passwordRegisterConfirmField = new JPasswordField();
-		passwordRegisterConfirmField.setBounds(20, 340, 420, 40);
+		passwordRegisterConfirmField.setBounds(20, 340, this.panel.getWidth() - 40, 40);
 		passwordRegisterConfirmField.setBackground(fieldColor);
 		passwordRegisterConfirmField.setFont(new Font("Microsoft New Tai Lue", 0, 18));
 		passwordRegisterConfirmField.setForeground(fontColor1);
@@ -363,7 +364,7 @@ public class Login extends JFrame
 		finalPanel.add(passwordRegisterConfirmField);
 
 		finishButton = new JLabel("Terminar", SwingConstants.CENTER);
-		finishButton.setBounds(20, 420, 420, 40);
+		finishButton.setBounds(20, 420, this.panel.getWidth() - 40, 40);
 		finishButton.setFont(new Font("Microsoft New Tai Lue", 1, 16));
 		finishButton.setForeground(buttonTextColor);
 		finishButton.setBackground(buttonColor);
